@@ -1,0 +1,7 @@
+pio file generate
+
+cd ./build/pioasm
+make
+./pioasm -o c-sdk ../../pio/hello.pio ../../pio/pio.h
+
+
