@@ -8,38 +8,79 @@
 #include "hardware/pio.h"
 #endif
 
-// ------ //
-// ws2812 //
-// ------ //
+// ----- //
+// blink //
+// ----- //
 
-#define ws2812_wrap_target 0
-#define ws2812_wrap 3
+#define blink_wrap_target 0
+#define blink_wrap 30
 
-#define ws2812_T1 2
-#define ws2812_T2 5
-#define ws2812_T3 3
-
-static const uint16_t ws2812_program_instructions[] = {
+static const uint16_t blink_program_instructions[] = {
             //     .wrap_target
-    0x6221, //  0: out    x, 1            side 0 [2] 
-    0x1123, //  1: jmp    !x, 3           side 1 [1] 
-    0x1400, //  2: jmp    0               side 1 [4] 
-    0xa442, //  3: nop                    side 0 [4] 
+    0xbf42, //  0: nop                           [31]
+    0xbf42, //  1: nop                           [31]
+    0xbf42, //  2: nop                           [31]
+    0xbf42, //  3: nop                           [31]
+    0xbf42, //  4: nop                           [31]
+    0xbf42, //  5: nop                           [31]
+    0xbf42, //  6: nop                           [31]
+    0xbf42, //  7: nop                           [31]
+    0xbf42, //  8: nop                           [31]
+    0xbf42, //  9: nop                           [31]
+    0xbf42, // 10: nop                           [31]
+    0xbf42, // 11: nop                           [31]
+    0xbf42, // 12: nop                           [31]
+    0xbf42, // 13: nop                           [31]
+    0xff00, // 14: set    pins, 0                [31]
+    0xbf42, // 15: nop                           [31]
+    0xbf42, // 16: nop                           [31]
+    0xbf42, // 17: nop                           [31]
+    0xbf42, // 18: nop                           [31]
+    0xbf42, // 19: nop                           [31]
+    0xbf42, // 20: nop                           [31]
+    0xbf42, // 21: nop                           [31]
+    0xbf42, // 22: nop                           [31]
+    0xbf42, // 23: nop                           [31]
+    0xbf42, // 24: nop                           [31]
+    0xbf42, // 25: nop                           [31]
+    0xbf42, // 26: nop                           [31]
+    0xbf42, // 27: nop                           [31]
+    0xbf42, // 28: nop                           [31]
+    0xbf42, // 29: nop                           [31]
+    0xff01, // 30: set    pins, 1                [31]
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
-static const struct pio_program ws2812_program = {
-    .instructions = ws2812_program_instructions,
-    .length = 4,
+static const struct pio_program blink_program = {
+    .instructions = blink_program_instructions,
+    .length = 31,
     .origin = -1,
 };
 
-static inline pio_sm_config ws2812_program_get_default_config(uint offset) {
+static inline pio_sm_config blink_program_get_default_config(uint offset) {
     pio_sm_config c = pio_get_default_sm_config();
-    sm_config_set_wrap(&c, offset + ws2812_wrap_target, offset + ws2812_wrap);
-    sm_config_set_sideset(&c, 1, false, false);
+    sm_config_set_wrap(&c, offset + blink_wrap_target, offset + blink_wrap);
     return c;
 }
+
+static inline void blink_program_init(PIO pio, uint stma, uint offset, uint pin, uint freq)
+{
+    pio_gpio_init(pio, pin);
+    pio_sm_set_consecutive_pindirs(pio, stma, pin, 8, true);
+    pio_sm_config c = blink_program_get_default_config(offset);
+    sm_config_set_set_pins(&c, pin, 1);
+
+    //clock
+    float div = clock_get_hz(clk_sys) / (freq * 2);
+    sm_config_set_clkdiv(&c, div);
+
+
+
+    pio_sm_init(pio, stma, offset, &c);
+    pio_sm_set_enabled(pio, stma, true);
+    printf("Blinking pin %d at %d Hz, div: %f\n", pin, freq, c.clkdiv);
+}
+
 #endif
 
