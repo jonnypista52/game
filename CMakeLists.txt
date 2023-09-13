@@ -37,6 +37,7 @@ add_executable(game
               pio/config.cpp
 
               debug/printer.cpp
+              debug/mix.cpp
               )
 
 pico_set_program_name(game "game")

@@ -7,8 +7,8 @@
 #include "./pio/config.h"
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
+#include "./debug/mix.h"
 #include <stdlib.h>
-#include "hardware/structs/bus_ctrl.h"
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
 {
@@ -72,10 +72,10 @@ int main()
     // set DMA
     DMASetup(pio, sm);
 
-    puts("Hello, world!");
+    printf("Hello, world!");
 
     pio_sm_set_enabled(pio, sm, true);
-
+    printf("free memory: %d\n",getFreeHeap());
     while (true)
     {
         for (int i = 0; i < 32; i++)
