@@ -13,48 +13,18 @@
 // ----- //
 
 #define blink_wrap_target 0
-#define blink_wrap 30
+#define blink_wrap 0
 
 static const uint16_t blink_program_instructions[] = {
             //     .wrap_target
-    0xbf42, //  0: nop                           [31]
-    0xbf42, //  1: nop                           [31]
-    0xbf42, //  2: nop                           [31]
-    0xbf42, //  3: nop                           [31]
-    0xbf42, //  4: nop                           [31]
-    0xbf42, //  5: nop                           [31]
-    0xbf42, //  6: nop                           [31]
-    0xbf42, //  7: nop                           [31]
-    0xbf42, //  8: nop                           [31]
-    0xbf42, //  9: nop                           [31]
-    0xbf42, // 10: nop                           [31]
-    0xbf42, // 11: nop                           [31]
-    0xbf42, // 12: nop                           [31]
-    0xbf42, // 13: nop                           [31]
-    0xff00, // 14: set    pins, 0                [31]
-    0xbf42, // 15: nop                           [31]
-    0xbf42, // 16: nop                           [31]
-    0xbf42, // 17: nop                           [31]
-    0xbf42, // 18: nop                           [31]
-    0xbf42, // 19: nop                           [31]
-    0xbf42, // 20: nop                           [31]
-    0xbf42, // 21: nop                           [31]
-    0xbf42, // 22: nop                           [31]
-    0xbf42, // 23: nop                           [31]
-    0xbf42, // 24: nop                           [31]
-    0xbf42, // 25: nop                           [31]
-    0xbf42, // 26: nop                           [31]
-    0xbf42, // 27: nop                           [31]
-    0xbf42, // 28: nop                           [31]
-    0xbf42, // 29: nop                           [31]
-    0xff01, // 30: set    pins, 1                [31]
+    0x7f08, //  0: out    pins, 8                [31]
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program blink_program = {
     .instructions = blink_program_instructions,
-    .length = 31,
+    .length = 1,
     .origin = -1,
 };
 
@@ -72,10 +42,13 @@ static inline void blink_program_init(PIO pio, uint stma, uint offset, uint pin,
     pio_sm_set_consecutive_pindirs(pio, stma, pin, 8, true);
     sm_config_set_set_pins(&c, pin, 5);
     sm_config_set_out_pins(&c, pin, 8);
+    sm_config_set_out_shift(&c,true,true,8);
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
     // clock
+    float div = clock_get_hz(clk_sys) / (freq * 2);
     sm_config_set_clkdiv_int_frac(&c, 0xffff,0);
     pio_sm_init(pio, stma, offset, &c);
-    pio_sm_set_enabled(pio, stma, true);
+    //pio_sm_set_enabled(pio, stma, true);
     printf("Blinking pin %d at %d Hz, div: %f\n", pin, freq, c.clkdiv);
 }
 

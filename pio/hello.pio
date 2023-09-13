@@ -7,37 +7,7 @@
 .program blink
 
 .wrap_target
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    set pins, 0 [31]   ; Turn LED on
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    nop [31]
-    set pins, 1 [31]   ; Turn LED on
+    out pins, 8 [31]   ; Turn LED on
 .wrap             ; Blink forever!
 
 
@@ -50,12 +20,13 @@ static inline void blink_program_init(PIO pio, uint stma, uint offset, uint pin,
     pio_sm_set_consecutive_pindirs(pio, stma, pin, 8, true);
     sm_config_set_set_pins(&c, pin, 5);
     sm_config_set_out_pins(&c, pin, 8);
+    sm_config_set_out_shift(&c,true,true,8);
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
     // clock
     float div = clock_get_hz(clk_sys) / (freq * 2);
-    //sm_config_set_clkdiv(&c, div);
     sm_config_set_clkdiv_int_frac(&c, 0xffff,0);
     pio_sm_init(pio, stma, offset, &c);
-    pio_sm_set_enabled(pio, stma, true);
+    //pio_sm_set_enabled(pio, stma, true);
     printf("Blinking pin %d at %d Hz, div: %f\n", pin, freq, c.clkdiv);
 }
 %}

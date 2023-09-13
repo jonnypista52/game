@@ -6,6 +6,9 @@
 #include "./pio/pio.h"
 #include "./pio/config.h"
 #include "./errorCheck/basicError.h"
+#include "./debug/printer.h"
+#include <stdlib.h>
+#include "hardware/structs/bus_ctrl.h"
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
 {
@@ -62,26 +65,31 @@ int main()
     printf("Loaded program at %d\n", offset);
 
     // init
-    blink_program_init(pio, sm, offset, 11, 1);
-    /*
-    // set DMA
-    size_t capture_buf_size = 1;
+    size_t capture_buf_size = 32;
     uint32_t capture_buf[capture_buf_size];
-    uint dma_chan = dma_claim_unused_channel(true);
-    negError(dma_chan, "failed to  get a free DMA channel");
-    DMASetup(pio, sm, dma_chan, capture_buf, capture_buf_size, true);
-    */
+    blink_program_init(pio, sm, offset, 11, 1);
+
+    // set DMA
+    DMASetup(pio, sm);
+
     puts("Hello, world!");
-    /*
+
     pio_sm_set_enabled(pio, sm, true);
-    for (int i = 0; i < 8; i++)
+
+    while (true)
     {
-        pio->txf[sm] = 0xAAAAAAAA;
-        sleep_ms(1000);
+        for (int i = 0; i < 32; i++)
+        {
+            // random int between 0 and 19
+            capture_buf[i] = rand() % 255;
+            printBits(sizeof(uint32_t), &capture_buf[i]);
+        }
+        dma_channel_hw_addr(DMA_CB_CHANNEL)->al3_read_addr_trig = (uintptr_t)capture_buf;
+        dma_channel_wait_for_finish_blocking(DMA_CHANNEL);
     }
 
     printf("done\n");
-*/
+
     while (1)
     {
         tight_loop_contents();

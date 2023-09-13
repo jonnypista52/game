@@ -36,7 +36,7 @@ add_executable(game
               controll/SDCard.cpp
               pio/config.cpp
 
-              
+              debug/printer.cpp
               )
 
 pico_set_program_name(game "game")
