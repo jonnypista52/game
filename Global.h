@@ -1,4 +1,5 @@
-#pragma once
+#ifndef Global_h
+#define Global_h
 
 #include <stdio.h>
 #include "pico/stdlib.h"
@@ -29,3 +30,6 @@
 #define SD_MOSI_test 18
 #define SD_MISO_test 17
 #define SD_CS_test 16
+
+
+#endif

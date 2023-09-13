@@ -27,11 +27,16 @@ pico_sdk_init()
 
 # Add executable. Default name is the project name, version 0.1
 
-add_executable(game 
+add_executable(game
+              errorCheck/basicError.cpp
+              
               game.cpp
               controll/spi.cpp
               controll/spiPorts.cpp
               controll/SDCard.cpp
+              pio/config.cpp
+
+              
               )
 
 pico_set_program_name(game "game")
