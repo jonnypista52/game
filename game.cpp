@@ -4,6 +4,8 @@
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 #include "./pio/pio.h"
+#include "./pio/config.h"
+#include "./errorCheck/basicError.h"
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
 {
@@ -35,13 +37,12 @@ void core1_entry()
     }
 }
 
-
 int main()
 {
+    uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
     sleep_ms(2000);
     set_sys_clock_48mhz();
-    //set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
 
     /*
@@ -60,9 +61,27 @@ int main()
     uint offset = pio_add_program(pio, &blink_program);
     printf("Loaded program at %d\n", offset);
 
+    // init
     blink_program_init(pio, sm, offset, 11, 1);
-        
+    /*
+    // set DMA
+    size_t capture_buf_size = 1;
+    uint32_t capture_buf[capture_buf_size];
+    uint dma_chan = dma_claim_unused_channel(true);
+    negError(dma_chan, "failed to  get a free DMA channel");
+    DMASetup(pio, sm, dma_chan, capture_buf, capture_buf_size, true);
+    */
     puts("Hello, world!");
+    /*
+    pio_sm_set_enabled(pio, sm, true);
+    for (int i = 0; i < 8; i++)
+    {
+        pio->txf[sm] = 0xAAAAAAAA;
+        sleep_ms(1000);
+    }
+
+    printf("done\n");
+*/
     while (1)
     {
         tight_loop_contents();

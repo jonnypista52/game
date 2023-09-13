@@ -66,17 +66,14 @@ static inline pio_sm_config blink_program_get_default_config(uint offset) {
 
 static inline void blink_program_init(PIO pio, uint stma, uint offset, uint pin, uint freq)
 {
-    pio_gpio_init(pio, pin);
-    pio_sm_set_consecutive_pindirs(pio, stma, pin, 8, true);
     pio_sm_config c = blink_program_get_default_config(offset);
-    sm_config_set_set_pins(&c, pin, 1);
-
-    //clock
-    float div = clock_get_hz(clk_sys) / (freq * 2);
-    sm_config_set_clkdiv(&c, div);
-
-
-
+    for (int i = pin; i < pin + 8; i++)
+        pio_gpio_init(pio, i);
+    pio_sm_set_consecutive_pindirs(pio, stma, pin, 8, true);
+    sm_config_set_set_pins(&c, pin, 5);
+    sm_config_set_out_pins(&c, pin, 8);
+    // clock
+    sm_config_set_clkdiv_int_frac(&c, 0xffff,0);
     pio_sm_init(pio, stma, offset, &c);
     pio_sm_set_enabled(pio, stma, true);
     printf("Blinking pin %d at %d Hz, div: %f\n", pin, freq, c.clkdiv);
