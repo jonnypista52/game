@@ -2,6 +2,7 @@
 #define Global_h
 
 #include <stdio.h>
+#include <iostream>
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/gpio.h"

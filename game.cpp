@@ -8,7 +8,14 @@
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
 #include "./debug/mix.h"
+#include "./input/include/Stick.h"
 #include <stdlib.h>
+
+
+//! TEST
+
+
+//! END TEST
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
 {
@@ -56,40 +63,7 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
-    // Timer example code - This example fires off the callback after 2000ms
-    // add_alarm_in_ms(2000, alarm_callback, NULL, false);
-
-    PIO pio = pio0;
-    int sm = 0;
-    uint offset = pio_add_program(pio, &blink_program);
-    printf("Loaded program at %d\n", offset);
-
-    // init
-    size_t capture_buf_size = 32;
-    uint32_t capture_buf[capture_buf_size];
-    blink_program_init(pio, sm, offset, 11, 1);
-
-    // set DMA
-    DMASetup(pio, sm);
-
     printf("Hello, world!");
-
-    pio_sm_set_enabled(pio, sm, true);
-    printf("free memory: %d\n",getFreeHeap());
-    while (true)
-    {
-        for (int i = 0; i < 32; i++)
-        {
-            // random int between 0 and 19
-            capture_buf[i] = rand() % 255;
-            printBits(sizeof(uint32_t), &capture_buf[i]);
-        }
-        dma_channel_hw_addr(DMA_CB_CHANNEL)->al3_read_addr_trig = (uintptr_t)capture_buf;
-        dma_channel_wait_for_finish_blocking(DMA_CHANNEL);
-    }
-
-    printf("done\n");
-
     while (1)
     {
         tight_loop_contents();

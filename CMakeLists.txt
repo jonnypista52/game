@@ -36,6 +36,8 @@ add_executable(game
               controll/SDCard.cpp
               pio/config.cpp
 
+              input/Stick.cpp
+
               debug/printer.cpp
               debug/mix.cpp
               )

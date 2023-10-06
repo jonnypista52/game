@@ -3,6 +3,7 @@
 
 #include "../Global.h"
 
+//print anything in binary
 void printBits(size_t const size, void const * const ptr);
 
 #endif
