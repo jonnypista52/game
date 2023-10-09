@@ -25,4 +25,5 @@ public:
     STICK(/* args */);
     ~STICK();
     STICK_POSITION getStickPosition();
+    uint16_t getThrotle();
 };

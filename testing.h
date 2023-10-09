@@ -14,7 +14,6 @@
 #include "./input/include/Stick.h"
 #include <stdlib.h>
 
-
 void PIOtest()
 {
     PIO pio = pio0;
@@ -45,11 +44,16 @@ void PIOtest()
     }
 }
 
-void Sticktest(){
+void Sticktest()
+{
     STICK stick;
+    while (true)
+    {
 
+        STICK_POSITION pos = stick.getStickPosition();
+        std::cout << "x: " << pos.x << " y: " << pos.y <<" gas: " << stick.getThrotle() << std::endl;
 
-    STICK_POSITION pos = stick.getStickPosition();
-    std::cout<<"x: "<< pos.x << "y: " << pos.y << std::endl;
+        sleep_ms(500);
+    }
 }
 #endif

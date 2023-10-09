@@ -11,11 +11,8 @@
 #include "./input/include/Stick.h"
 #include <stdlib.h>
 
+#include "./testing.h"
 
-//! TEST
-
-
-//! END TEST
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
 {
@@ -55,6 +52,9 @@ int main()
     set_sys_clock_48mhz();
     printf("starting %d\n", clock_get_hz(clk_sys));
 
+    //! TEST
+    Sticktest();
+    //! END TEST
     /*
     multicore_launch_core1(core1_entry);
 
