@@ -20,17 +20,10 @@
 
 //* DAC pins
 #define SD_SPI_CHANNEL 0
-#define SD_FREQ 400000
+#define SD_FREQ 120000
 #define SD_SCK 2
 #define SD_MOSI 3
 #define SD_MISO 4
 #define SD_CS 5
-
-//*TestProbes
-#define SD_SCK_test 19
-#define SD_MOSI_test 18
-#define SD_MISO_test 17
-#define SD_CS_test 16
-
 
 #endif
