@@ -47,7 +47,6 @@ void core1_entry()
 
 int main()
 {
-    uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
     sleep_ms(2000);
     set_sys_clock_48mhz();
