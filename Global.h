@@ -26,11 +26,15 @@
 #define SD_MISO 4
 #define SD_CS 5
 
+<<<<<<< Updated upstream
 //*TestProbes
 #define SD_SCK_test 19
 #define SD_MOSI_test 18
 #define SD_MISO_test 17
 #define SD_CS_test 16
+=======
+
+>>>>>>> Stashed changes
 
 
 #endif

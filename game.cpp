@@ -12,6 +12,7 @@
 #include <stdlib.h>
 
 #include "./testing.h"
+#include "hardware/structs/bus_ctrl.h"
 
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
@@ -53,15 +54,59 @@ int main()
     printf("starting %d\n", clock_get_hz(clk_sys));
 
     //! TEST
+<<<<<<< Updated upstream
     Sticktest();
     //! END TEST
     /*
     multicore_launch_core1(core1_entry);
+=======
+
+    // Sticktest();
+
+    //! END TEST
+
+    // multicore_launch_core1(core1_entry);
+>>>>>>> Stashed changes
 
     SPIPORTS *sd_spi_ports = new SPIPORTS(SD_SPI_CHANNEL, SD_CS, SD_SCK, SD_MOSI, SD_MISO);
     SPI *spisd = new SPI(SD_FREQ, sd_spi_ports);
     SDCARD *sdCard = new SDCARD(spisd);
+<<<<<<< Updated upstream
     */
+=======
+
+    /*
+     PIO pio = pio0;
+     int sm = 0;
+     uint offset = pio_add_program(pio, &blink_program);
+     printf("Loaded program at %d\n", offset);
+
+     // init
+     size_t capture_buf_size = 32;
+     uint32_t capture_buf[capture_buf_size];
+     blink_program_init(pio, sm, offset, 11, 1);
+
+     // set DMA
+     DMASetup(pio, sm);
+
+     puts("Hello, world!");
+
+     pio_sm_set_enabled(pio, sm, true);
+
+     while (true)
+     {
+         for (int i = 0; i < 32; i++)
+         {
+             // random int between 0 and 19
+             capture_buf[i] = rand() % 255;
+             printBits(sizeof(uint32_t), &capture_buf[i]);
+         }
+         dma_channel_hw_addr(DMA_CB_CHANNEL)->al3_read_addr_trig = (uintptr_t)capture_buf;
+         dma_channel_wait_for_finish_blocking(DMA_CHANNEL);
+     }
+    */
+    printf("done\n");
+>>>>>>> Stashed changes
 
     printf("Hello, world!");
     while (1)
