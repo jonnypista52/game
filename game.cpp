@@ -6,8 +6,7 @@
 #include "./controll/SDCard.h"
 
 #include "./pio/vga/config.h"
-#include "./pio/vga/hvga.h"
-#include "./pio/vga/vvga.h"
+#include "./pio/vga/vga.h"
 
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
@@ -48,6 +47,7 @@ int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
+    sleep_ms(2000);
     set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
 
@@ -61,20 +61,7 @@ int main()
     SPI *spisd = new SPI(SD_FREQ, sd_spi_ports);
     SDCARD *sdCard = new SDCARD(spisd);
     */
-    PIO pio = pio0;
-
-    uint smHsync = 0;
-    uint smVsync = 1;
-    uint offsetHsync = pio_add_program(pio, &vga_hsync_program);
-    uint offsetVsync = pio_add_program(pio, &vga_vsync_program);
-    printf("Hsync loaded%d \n", offsetHsync);
-    printf("Vsync loaded%d \n", offsetVsync);
-
-    // init
-    vga_hsync_program_init(pio, smHsync, offsetHsync, HSYNC);
-    vga_vsync_program_init(pio, smVsync, offsetVsync, VSYNC);
-    pio_sm_put_blocking(pio, smHsync, 800);
-    pio_sm_put_blocking(pio, smVsync, 800);
+    VGA vga(pio0,0,pio0,1);
     /*
     // set DMA
     DMASetup(pio, sm);

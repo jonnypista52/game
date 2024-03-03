@@ -13,21 +13,20 @@
 // --------- //
 
 #define vga_hsync_wrap_target 1
-#define vga_hsync_wrap 3
+#define vga_hsync_wrap 2
 
 static const uint16_t vga_hsync_program_instructions[] = {
     0x6040, //  0: out    y, 32           side 0     
             //     .wrap_target
-    0xaf22, //  1: mov    x, y            side 0 [15]
+    0xa922, //  1: mov    x, y            side 0 [9] 
     0x1042, //  2: jmp    x--, 2          side 1     
-    0xaf42, //  3: nop                    side 0 [15]
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program vga_hsync_program = {
     .instructions = vga_hsync_program_instructions,
-    .length = 4,
+    .length = 3,
     .origin = -1,
 };
 
@@ -47,7 +46,7 @@ static inline void vga_hsync_program_init(PIO pio, uint stma, uint offset, uint 
     sm_config_set_set_pins(&c, hsync, 1);
     sm_config_set_out_shift(&c,true,true,8);
     // clock
-    sm_config_set_clkdiv_int_frac(&c, 0x100,0);
+    sm_config_set_clkdiv_int_frac(&c, 178,0);
     pio_sm_init(pio, stma, offset, &c);
     pio_sm_set_enabled(pio, stma, true);
 }
