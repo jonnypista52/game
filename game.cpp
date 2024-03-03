@@ -7,6 +7,8 @@
 
 #include "./pio/vga/config.h"
 #include "./pio/vga/hvga.h"
+#include "./pio/vga/vvga.h"
+
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
 #include "./debug/mix.h"
@@ -16,7 +18,7 @@
 #include <stdlib.h>
 #include "hardware/structs/bus_ctrl.h"
 
-//#include "./testing.h"
+// #include "./testing.h"
 
 /*
 int64_t alarm_callback(alarm_id_t id, void *user_data)
@@ -46,7 +48,6 @@ int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
-    sleep_ms(2000);
     set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
 
@@ -61,23 +62,28 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
     PIO pio = pio0;
-    int smHsync = 0;
-    uint offset = pio_add_program(pio, &vga_hsync_program);
-    printf("Loaded program at %d\n", offset);
+
+    uint smHsync = 0;
+    uint smVsync = 1;
+    uint offsetHsync = pio_add_program(pio, &vga_hsync_program);
+    uint offsetVsync = pio_add_program(pio, &vga_vsync_program);
+    printf("Hsync loaded%d \n", offsetHsync);
+    printf("Vsync loaded%d \n", offsetVsync);
 
     // init
-    size_t capture_buf_size = 32;
-    uint32_t capture_buf[capture_buf_size];
-    vga_hsync_program_init(pio, smHsync, offset, HSYNC);
-    pio_sm_put_blocking(pio,smHsync,800);
+    vga_hsync_program_init(pio, smHsync, offsetHsync, HSYNC);
+    vga_vsync_program_init(pio, smVsync, offsetVsync, VSYNC);
+    pio_sm_put_blocking(pio, smHsync, 800);
+    pio_sm_put_blocking(pio, smVsync, 800);
     /*
     // set DMA
     DMASetup(pio, sm);
-
+    size_t capture_buf_size = 32;
+    uint32_t capture_buf[capture_buf_size];
     puts("Hello, world!");
 
     pio_sm_set_enabled(pio, sm, true);
-    
+
     while (true)
     {
         for (int i = 0; i < 32; i++)
@@ -91,14 +97,11 @@ int main()
     }
     */
 
-
-
     printf("End world!");
 
     while (true)
     {
     }
-    
 
     return 0;
 }
