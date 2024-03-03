@@ -1,6 +1,7 @@
 #ifndef Global_h
 #define Global_h
 
+#include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
 #include "pico/stdlib.h"
@@ -26,11 +27,9 @@
 #define SD_MISO 4
 #define SD_CS 5
 
-//*TestProbes
-#define SD_SCK_test 19
-#define SD_MOSI_test 18
-#define SD_MISO_test 17
-#define SD_CS_test 16
+//*VGA signals
+#define HSYNC 6
+#define VSYNC 7
 
 
 #endif
