@@ -3,13 +3,13 @@
 ;
 ; SPDX-License-Identifier: BSD-3-Clause
 ;
-;6.355507 us blank
+;3.8133068520357 us sync
 .program vga_hsync
 .side_set 1
     out y, 32 side 0
 .wrap_target 
 ;front porch
-    mov x, y side 0 [9]
+    mov x, y side 0 [4]
 video:
     jmp x-- video side 1; Delay for (x + 1) cycles, x is a 32 bit number
 .wrap
