@@ -9,11 +9,16 @@
     out y, 32 side 0
 .wrap_target 
 ;front porch
-    mov x, y side 0 [15] 
+    mov x, y side 1
+;sync
+    wait 0 GPIO 6 side 0
+    wait 1 GPIO 6 side 0
+    wait 0 GPIO 6 side 0
+    wait 1 GPIO 6 side 0
+    wait 0 GPIO 6 side 0
+    wait 1 GPIO 6 side 0
 video:
     jmp x-- video side 1; Delay for (x + 1) cycles, x is a 32 bit number
-;end
-    nop [15] side 0
 .wrap
 
 
@@ -29,7 +34,7 @@ static inline void vga_vsync_program_init(PIO pio, uint stma, uint offset, uint 
     sm_config_set_set_pins(&c, vsync, 1);
     sm_config_set_out_shift(&c,true,true,8);
     // clock
-    sm_config_set_clkdiv_int_frac(&c, 0x1000,0);
+    sm_config_set_clkdiv_int_frac(&c, 178,0);
     pio_sm_init(pio, stma, offset, &c);
     pio_sm_set_enabled(pio, stma, true);
 }
