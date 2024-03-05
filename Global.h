@@ -30,6 +30,6 @@
 //*VGA signals
 #define HSYNC 6
 #define VSYNC 7
-
+#define VIDEOR0 8
 
 #endif

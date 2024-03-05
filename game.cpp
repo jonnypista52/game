@@ -5,7 +5,6 @@
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 
-#include "./pio/vga/config.h"
 #include "./pio/vga/vga.h"
 
 #include "./errorCheck/basicError.h"
@@ -61,7 +60,8 @@ int main()
     SPI *spisd = new SPI(SD_FREQ, sd_spi_ports);
     SDCARD *sdCard = new SDCARD(spisd);
     */
-    VGA vga(pio0,0,pio0,1);
+    VGA vga(pio0,0,pio0,1, pio1,0);
+    vga.randomdata();
     /*
     // set DMA
     DMASetup(pio, sm);

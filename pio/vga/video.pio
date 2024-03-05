@@ -1,0 +1,35 @@
+;
+; Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
+;
+; SPDX-License-Identifier: BSD-3-Clause
+;
+
+.program vga_video
+    out y, 32
+.wrap_target 
+start:
+    wait 0 GPIO 6
+    wait 1 GPIO 6 [1]
+video:
+    out pins 8
+    jmp x-- video; Delay for (x + 1) cycles, x is a 32 bit number
+    mov pins NULL
+.wrap
+
+
+% c-sdk {
+static inline void vga_video_program_init(PIO pio, uint stma, uint offset, uint startDataPin)
+{
+    pio_sm_config c = vga_video_program_get_default_config(offset);
+    for (int i = startDataPin; i < startDataPin + 8; i++)
+        pio_gpio_init(pio, i);
+    pio_sm_set_consecutive_pindirs(pio, stma, startDataPin, 8, true);
+    sm_config_set_out_pins(&c, startDataPin, 8);
+    sm_config_set_out_shift(&c, true, true, 8);
+    sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
+    // clock
+    sm_config_set_clkdiv_int_frac(&c, 178, 0);
+    pio_sm_init(pio, stma, offset, &c);
+    printf("data print: \n");
+}
+%}
