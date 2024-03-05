@@ -18,10 +18,11 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
     vga_video_program_init(video, videoSM, offsetVideo, VIDEOR0);
     pio_sm_put_blocking(hSync, hSyncSM, (640 + 16 + 48) / 16); // running a 16x extra divider
     pio_sm_put_blocking(vSync, vSyncSM, ((640 + 16 + 48) / 16) * (480 + 10 + 103));
-    pio_sm_put_blocking(video, videoSM, 640);
+    pio_sm_set_enabled(video, videoSM, true);
+    
     pio_sm_set_enabled(hSync, hSyncSM, true);
     pio_sm_set_enabled(vSync, vSyncSM, true);
-    DMASetup(video, videoSM);
+    //DMASetup(video, videoSM);
     pio_sm_set_enabled(video, videoSM, true);
 }
 
@@ -34,15 +35,10 @@ void VGA::randomdata()
     printf("printing random\n");
     size_t capture_buf_size = 32;
     uint32_t capture_buf[capture_buf_size];
+    pio_sm_put_blocking(video, videoSM, 640/2);
     while (true)
     {
-        for (int i = 0; i < 32; i++)
-        {
-            // random int between 0 and 19
-            capture_buf[i] = 255;
-        }
-        dma_channel_hw_addr(DMA_CB_CHANNEL)->al3_read_addr_trig = (uintptr_t)capture_buf;
-        dma_channel_wait_for_finish_blocking(DMA_CHANNEL);
+        pio_sm_put_blocking(video, videoSM, rand() % 0xFFFFFFFF);
     }
 }
 
