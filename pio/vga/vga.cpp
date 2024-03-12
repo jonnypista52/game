@@ -18,12 +18,12 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
     vga_video_program_init(video, videoSM, offsetVideo, VIDEOR0);
     pio_sm_put_blocking(hSync, hSyncSM, (640 + 16 + 48) / 16); // running a 16x extra divider
     pio_sm_put_blocking(vSync, vSyncSM, ((640 + 16 + 48) / 16) * (480 + 10 + 103));
-    pio_sm_set_enabled(video, videoSM, true);
-    
+    pio_sm_put_blocking(video, videoSM, 640 / 2);
     pio_sm_set_enabled(hSync, hSyncSM, true);
     pio_sm_set_enabled(vSync, vSyncSM, true);
-    //DMASetup(video, videoSM);
     pio_sm_set_enabled(video, videoSM, true);
+    // sem_init(&reset_delay_complete_sem, 1, 1); // initially posted so we don't block first time
+    // DMASetup(video, videoSM);
 }
 
 VGA::~VGA()
@@ -33,12 +33,20 @@ VGA::~VGA()
 void VGA::randomdata()
 {
     printf("printing random\n");
-    size_t capture_buf_size = 32;
-    uint32_t capture_buf[capture_buf_size];
-    pio_sm_put_blocking(video, videoSM, 640/2);
+
+    for (int i = 0; i < NUM_PIXELS_INLINE; i++)
+    {
+        fragment_start[i] = 0xFFFFFFFF;
+    }
+    fragment_start[NUM_PIXELS_INLINE] = 0;
     while (true)
     {
-        pio_sm_put_blocking(video, videoSM, rand() % 0xFFFFFFFF);
+        pio_sm_put_blocking(video, videoSM, 0xFFFFFFFF);
+        // printf("block sem\n");
+        // sem_acquire_blocking(&reset_delay_complete_sem);
+        // printf("send\n");
+        // dma_channel_hw_addr(DMA_CB_CHANNEL)->al3_read_addr_trig = (uintptr_t)fragment_start;
+        // printf("sent 0\n");
     }
 }
 
@@ -80,6 +88,14 @@ void VGA::DMASetup(PIO pio, uint sm)
     irq_set_enabled(DMA_IRQ_0, true);
 }
 
+int64_t reset_delay_complete(alarm_id_t id, void *user_data)
+{
+    reset_delay_alarm_id = 0;
+    sem_release(&reset_delay_complete_sem);
+    printf("release sem\n");
+    return 0;
+}
+
 void __isr dma_complete_handler()
 {
     if (dma_hw->ints0 & DMA_CHANNEL_MASK)
@@ -91,12 +107,4 @@ void __isr dma_complete_handler()
             cancel_alarm(reset_delay_alarm_id);
         reset_delay_alarm_id = add_alarm_in_us(400, reset_delay_complete, NULL, true);
     }
-}
-
-int64_t reset_delay_complete(alarm_id_t id, void *user_data)
-{
-    reset_delay_alarm_id = 0;
-    sem_release(&reset_delay_complete_sem);
-    // no repeat
-    return 0;
 }

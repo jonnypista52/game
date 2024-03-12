@@ -32,4 +32,7 @@
 #define VSYNC 7
 #define VIDEOR0 8
 
+
+#define NUM_PIXELS_INLINE 640
+
 #endif

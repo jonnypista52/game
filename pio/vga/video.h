@@ -13,7 +13,7 @@
 // --------- //
 
 #define vga_video_wrap_target 1
-#define vga_video_wrap 6
+#define vga_video_wrap 8
 
 static const uint16_t vga_video_program_instructions[] = {
     0x6040, //  0: out    y, 32                      
@@ -21,16 +21,18 @@ static const uint16_t vga_video_program_instructions[] = {
     0xa022, //  1: mov    x, y                       
     0x2006, //  2: wait   0 gpio, 6                  
     0x2f86, //  3: wait   1 gpio, 6              [15]
-    0x6008, //  4: out    pins, 8                    
-    0x0044, //  5: jmp    x--, 4                     
-    0xa003, //  6: mov    pins, null                 
+    0xaf42, //  4: nop                           [15]
+    0xaf42, //  5: nop                           [15]
+    0x6008, //  6: out    pins, 8                    
+    0x0046, //  7: jmp    x--, 6                     
+    0xa003, //  8: mov    pins, null                 
             //     .wrap
 };
 
 #if !PICO_NO_HARDWARE
 static const struct pio_program vga_video_program = {
     .instructions = vga_video_program_instructions,
-    .length = 7,
+    .length = 9,
     .origin = -1,
 };
 
