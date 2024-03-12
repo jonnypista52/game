@@ -9,7 +9,7 @@
     out y, 32 side 0
 .wrap_target 
 ;front porch
-    mov x, y side 0 [4]
+    mov x, y side 0 [5]
 video:
     jmp x-- video side 1; Delay for (x + 1) cycles, x is a 32 bit number
 .wrap

@@ -18,7 +18,7 @@
 static const uint16_t vga_hsync_program_instructions[] = {
     0x6040, //  0: out    y, 32           side 0     
             //     .wrap_target
-    0xa422, //  1: mov    x, y            side 0 [4] 
+    0xa522, //  1: mov    x, y            side 0 [5] 
     0x1042, //  2: jmp    x--, 2          side 1     
             //     .wrap
 };

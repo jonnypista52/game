@@ -16,7 +16,7 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
     vga_hsync_program_init(hSync, hSyncSM, offsetHsync, HSYNC);
     vga_vsync_program_init(vSync, vSyncSM, offsetVsync, VSYNC);
     vga_video_program_init(video, videoSM, offsetVideo, VIDEOR0);
-    pio_sm_put_blocking(hSync, hSyncSM, (640 + 16 + 48) / 16); // running a 16x extra divider
+    pio_sm_put_blocking(hSync, hSyncSM, (640 + 48) / 16); // running a 16x extra divider
     pio_sm_put_blocking(vSync, vSyncSM, ((640 + 16 + 48) / 16) * (480 + 10 + 103));
     pio_sm_put_blocking(video, videoSM, 640 / 2);
     pio_sm_set_enabled(hSync, hSyncSM, true);

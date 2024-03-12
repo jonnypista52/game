@@ -13,7 +13,7 @@ start:
     wait 0 GPIO 6
     wait 1 GPIO 6 [15]
     nop [15]
-    nop [15]
+    nop [14]
 video:
     out pins 8
     jmp x-- video; Delay for (x + 1) cycles, x is a 32 bit number

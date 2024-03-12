@@ -22,7 +22,7 @@ static const uint16_t vga_video_program_instructions[] = {
     0x2006, //  2: wait   0 gpio, 6                  
     0x2f86, //  3: wait   1 gpio, 6              [15]
     0xaf42, //  4: nop                           [15]
-    0xaf42, //  5: nop                           [15]
+    0xae42, //  5: nop                           [14]
     0x6008, //  6: out    pins, 8                    
     0x0046, //  7: jmp    x--, 6                     
     0xa003, //  8: mov    pins, null                 
