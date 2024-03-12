@@ -62,27 +62,6 @@ int main()
     */
     VGA vga(pio0,0,pio0,1, pio1,0);
     vga.randomdata();
-    /*
-    // set DMA
-    DMASetup(pio, sm);
-    size_t capture_buf_size = 32;
-    uint32_t capture_buf[capture_buf_size];
-    puts("Hello, world!");
-
-    pio_sm_set_enabled(pio, sm, true);
-
-    while (true)
-    {
-        for (int i = 0; i < 32; i++)
-        {
-            // random int between 0 and 19
-            capture_buf[i] = rand() % 255;
-            printBits(sizeof(uint32_t), &capture_buf[i]);
-        }
-        dma_channel_hw_addr(DMA_CB_CHANNEL)->al3_read_addr_trig = (uintptr_t)capture_buf;
-        dma_channel_wait_for_finish_blocking(DMA_CHANNEL);
-    }
-    */
 
     printf("End world!");
 

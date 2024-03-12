@@ -45,11 +45,9 @@ static inline void blink_program_init(PIO pio, uint stma, uint offset, uint pin,
     sm_config_set_out_shift(&c,true,true,8);
     sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
     // clock
-    float div = clock_get_hz(clk_sys) / (freq * 2);
     sm_config_set_clkdiv_int_frac(&c, 0xffff,0);
     pio_sm_init(pio, stma, offset, &c);
     //pio_sm_set_enabled(pio, stma, true);
-    printf("Blinking pin %d at %d Hz, div: %f\n", pin, freq, c.clkdiv);
 }
 
 #endif
