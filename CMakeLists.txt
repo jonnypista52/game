@@ -34,7 +34,8 @@ add_executable(game
               controll/spi.cpp
               controll/spiPorts.cpp
               controll/SDCard.cpp
-              pio/config.cpp
+
+              pio/vga/vga.cpp
 
               input/Stick.cpp
 
