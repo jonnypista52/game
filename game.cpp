@@ -60,9 +60,11 @@ int main()
     SPI *spisd = new SPI(SD_FREQ, sd_spi_ports);
     SDCARD *sdCard = new SDCARD(spisd);
     */
-    VGA vga(pio0,0,pio0,1, pio1,0);
-    vga.randomdata();
 
+
+
+    VGA vga(pio1,0,pio1,1, pio0,0);
+    
     printf("End world!");
 
     while (true)
