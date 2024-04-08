@@ -46,7 +46,7 @@ int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
-    sleep_ms(2000);
+    sleep_ms(1000);
     set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
 
@@ -61,11 +61,10 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
+    VGA vga(pio1, 0, pio1, 1, pio0, 0);
+    vga.fill();
 
-
-    VGA vga(pio1,0,pio1,1, pio0,0);
-    
-    printf("End world!");
+    vga.startSending();
 
     while (true)
     {

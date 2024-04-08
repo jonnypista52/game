@@ -34,5 +34,6 @@
 
 
 #define NUM_PIXELS_INLINE 320
+#define NUM_LINE_SCREEN 240
 
 #endif

@@ -9,7 +9,7 @@
     out y, 32 side 0
 .wrap_target 
 ;front porch
-    mov x, y side 1
+    mov x, y side 0
 ;sync
     wait 0 GPIO 6 side 0
     wait 1 GPIO 6 side 0

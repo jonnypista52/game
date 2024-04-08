@@ -8,20 +8,14 @@
 #include "pico/sem.h"
 #include "hardware/irq.h"
 
-// start of each value fragment (+1 for NULL terminator)
-static uintptr_t fragment_start[NUM_PIXELS_INLINE + 1];
 
-// alarm handle for handling delay
-static alarm_id_t reset_delay_alarm_id;
-
-static bool dma_hand_first = true;
-static int dma_chan;
-void dma_handler();
-
+inline static int bussyWayTooMuch = 0;
 
 class VGA
 {
 private:
+    inline static int dma_chan = 0;
+
     PIO vSync;
     uint vSyncSM;
     PIO hSync;
@@ -29,13 +23,25 @@ private:
     PIO video;
     uint videoSM;
 
+    inline static bool videoSync = false;
+    inline static int currentLineSend = 0;
     size_t capture_buf_size = 32;
     uint32_t capture_buf[32];
     void DMASetup(PIO pio, uint sm);
 
+    inline static uint32_t framebuffer[NUM_PIXELS_INLINE/4][240/4]{0};
+    inline static uint32_t blankLine[NUM_PIXELS_INLINE]{0};
+
 public:
     VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint videoSM);
     ~VGA();
+
+    //starts sending after it synced with vSync
+    void startSending();
+
+    static void dma_handler();
+    //! TEST
+    void fill();
 };
 
 #endif

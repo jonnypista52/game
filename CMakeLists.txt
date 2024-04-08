@@ -43,6 +43,8 @@ add_executable(game
               debug/mix.cpp
 
               vga/vga.cpp
+
+              video/video.cpp
               )
 
 pico_set_program_name(game "game")
