@@ -34,13 +34,28 @@ VGA::~VGA()
 
 void VGA::startSending()
 {
-    // Manually call the handler once, to trigger the first transfer
-    while (gpio_get(VSYNC))
-        ;
-    while (!gpio_get(VSYNC))
-        ;
-    irq_set_enabled(DMA_IRQ_0, true);
-    VGA::dma_handler();
+    while (1)
+    {
+
+        // Manually call the handler once, to trigger the first transfer
+        while (gpio_get(VSYNC))
+            ;
+        for (int currentLineSend = 0; currentLineSend < 525; currentLineSend++)
+        {
+            while (dma_channel_is_busy(dma_chan))
+                ;
+            
+            if (currentLineSend > 10 && currentLineSend < 490)
+            {
+                dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
+            }
+            else
+            {
+                dma_channel_set_read_addr(dma_chan, &blankLine, true);
+            }
+            dma_channel_start(dma_chan);            
+        }
+    }
 }
 
 ///***PRIVATE ****/////
@@ -59,51 +74,20 @@ void VGA::DMASetup(PIO pio, uint sm)
         &c,
         &pio0_hw->txf[0],      // Write address (only need to set this once)
         NULL,                  // Don't provide a read address yet
-        NUM_PIXELS_INLINE / 4, // Write the same value many times, then halt and interrupt
+        NUM_PIXELS_INLINE , // Write the same value many times, then halt and interrupt
         false                  // Don't start yet
     );
-    // Tell the DMA to raise IRQ line 0 when the channel finishes a block
-    dma_channel_set_irq0_enabled(dma_chan, true);
-
-    // Configure the processor to run dma_handler() when DMA IRQ 0 is asserted
-    irq_set_exclusive_handler(DMA_IRQ_0, VGA::dma_handler);
-}
-
-void VGA::dma_handler()
-{
-
-    if (dma_channel_is_busy(dma_chan))
-    {
-        bussyWayTooMuch++;
-    }
-
-    if (bussyWayTooMuch > 100)
-    {
-        printf("dma bussyWayTooMuch\n");
-        bussyWayTooMuch = 0;
-    }
-    dma_hw->ints0 = 1u < dma_chan;
-    if (currentLineSend > 10 && currentLineSend < 490)
-    {
-        dma_channel_set_read_addr(dma_chan, &framebuffer[currentLineSend], true);
-    }
-    else
-    {
-        dma_channel_set_read_addr(dma_chan, &blankLine, true);
-    }
-
-    currentLineSend = (currentLineSend + 1) % 525;
 }
 
 //***! TEST
 
 void VGA::fill()
 {
-    for (int i = 0; i < NUM_PIXELS_INLINE / 4; i++)
+    for (int i = 0; i < 3; i++)
     {
-        for (int j = 0; j < NUM_LINE_SCREEN / 4; j++)
+        for (int j = 0; j < NUM_PIXELS_INLINE; j++)
         {
-            framebuffer[i][j] = 255;
+            genBuffer[i][j] = 255;
         }
     }
 }
