@@ -35,14 +35,14 @@ add_executable(game
               controll/spiPorts.cpp
               controll/SDCard.cpp
 
-              pio/vga/vga.cpp
-
               input/Stick.cpp
 
               debug/printer.cpp
               debug/mix.cpp
 
               vga/vga.cpp
+
+              video/video.cpp
               )
 
 pico_set_program_name(game "game")

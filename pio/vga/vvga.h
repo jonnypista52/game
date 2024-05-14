@@ -18,7 +18,7 @@
 static const uint16_t vga_vsync_program_instructions[] = {
     0x6040, //  0: out    y, 32           side 0     
             //     .wrap_target
-    0xb022, //  1: mov    x, y            side 1     
+    0xa022, //  1: mov    x, y            side 0     
     0x2006, //  2: wait   0 gpio, 6       side 0     
     0x2086, //  3: wait   1 gpio, 6       side 0     
     0x2006, //  4: wait   0 gpio, 6       side 0     

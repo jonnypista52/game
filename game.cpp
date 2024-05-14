@@ -5,7 +5,7 @@
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 
-#include "./pio/vga/vga.h"
+#include "./vga/vga.h"
 
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
@@ -46,7 +46,7 @@ int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
-    sleep_ms(2000);
+    sleep_ms(1000);
     set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
 
@@ -60,10 +60,11 @@ int main()
     SPI *spisd = new SPI(SD_FREQ, sd_spi_ports);
     SDCARD *sdCard = new SDCARD(spisd);
     */
-    VGA vga(pio0,0,pio0,1, pio1,0);
-    vga.randomdata();
 
-    printf("End world!");
+    VGA vga(pio1, 0, pio1, 1, pio0, 0);
+    vga.fill();
+
+    vga.startSending();
 
     while (true)
     {
