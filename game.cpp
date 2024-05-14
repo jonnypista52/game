@@ -5,7 +5,7 @@
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 
-#include "./pio/vga/vga.h"
+#include "./vga/vga.h"
 
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
