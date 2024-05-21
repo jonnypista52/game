@@ -1,0 +1,11 @@
+* C:\Boti\git\game\hardware\vga conn.asc
+V1 P001 0 3.3
+V2 P002 0 3.3
+V3 P003 0 3.3
+R1 N001 P001 2000
+R2 N001 P002 1000
+R3 N001 P003 500
+R4 0 N001 75
+.tran 1
+.backanno
+.end
