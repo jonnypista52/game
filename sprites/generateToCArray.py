@@ -52,7 +52,7 @@ def png_to_c_array(filename, output_file):
         f.write("unsigned char pixel_data[] = " + array_string)
 
 # Usage example
-input_filename = "caster.png"
-output_filename = "caster.h"
+input_filename = "vanguard.png"
+output_filename = "vanguard.h"
 png_to_c_array(input_filename, output_filename)
 print(f"Pixel data written to {output_filename}")
