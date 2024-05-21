@@ -32,7 +32,9 @@
 #define VSYNC 7
 #define VIDEOR0 8
 
-
+#define NROFBGSPRITES 8
+#define MAPHEIGTH 15
+#define MAPLENGHT 20
 #define NUM_PIXELS_INLINE 320
 #define NUM_LINE_SCREEN 240
 

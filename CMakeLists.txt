@@ -35,6 +35,8 @@ add_executable(game
               controll/spiPorts.cpp
               controll/SDCard.cpp
 
+              GameLogic/videoGen/videoGen.cpp
+
               input/Stick.cpp
 
               debug/printer.cpp

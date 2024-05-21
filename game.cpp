@@ -5,12 +5,16 @@
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 
+#include "./GameLogic/videoGen/videoGen.h"
+
 #include "./vga/vga.h"
 
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
 #include "./debug/mix.h"
 #include "./input/include/Stick.h"
+
+
 
 #include "./debug/printer.h"
 #include <stdlib.h>
@@ -34,7 +38,6 @@ void gpio_callback(uint gpio, uint32_t events)
 void core1_entry()
 {
     puts("core1 started");
-    // gpio_set_irq_enabled_with_callback(SD_SCK_test, GPIO_IRQ_EDGE_RISE, true, &gpio_callback);
     while (1)
     {
         tight_loop_contents();
@@ -61,10 +64,9 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
-    VGA vga(pio1, 0, pio1, 1, pio0, 0);
-    vga.fill();
+    VGA* vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
 
-    vga.startSending();
+    VideoGen videogen(vga);
 
     while (true)
     {
