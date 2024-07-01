@@ -16,3 +16,10 @@ void printBits(size_t const size, void const *const ptr)
     }
     printf("\n");
 }
+
+void printArray(uint8_t* array, int arraySize){
+    for(int i=0;i<arraySize;i++){
+        printf("%d, ",array[i]);
+    }
+    printf("\n");
+}

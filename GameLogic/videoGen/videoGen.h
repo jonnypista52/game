@@ -1,7 +1,6 @@
 #ifndef videoGen_h
 #define videoGen_h
 
-
 #include "../../Global.h"
 #include "../../vga/vga.h"
 #include "../../sprites/caster.h"

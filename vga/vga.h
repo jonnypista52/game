@@ -40,6 +40,7 @@ public:
 
     //! TEST
     void fill();
+    void fillDifferent();
 };
 
 #endif

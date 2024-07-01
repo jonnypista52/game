@@ -35,6 +35,10 @@ void HsyncInterrupt_handler(uint gpio, uint32_t events)
     {
         VGA::sendNextLine();
     }
+    else{
+        VGA::sendBlank();
+    }
+    
     VGA::currentLineSend = (VGA::currentLineSend + 1) % 524;
 }
 
@@ -52,6 +56,7 @@ int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
+    sleep_ms(1000);
     set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
     //! TEST
@@ -66,11 +71,9 @@ int main()
     */
 
     VGA *vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
-
-    // vga->fill();
-    // VideoGen videogen(vga);
-    // videogen.random_Bg_Sprites_init(8);
-    vga->fill();
+    //VideoGen videogen(vga);
+    //videogen.random_Bg_Sprites_init(0);
+    vga->fillDifferent();
 
     while (!gpio_get(VSYNC))
         ;
@@ -83,7 +86,7 @@ int main()
 
     while (true)
     {
-        // videogen.fill_Bg_Sprites();
+        //videogen.fill_Bg_Sprites();
     }
 
     return 0;

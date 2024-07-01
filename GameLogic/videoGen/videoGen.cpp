@@ -16,6 +16,8 @@ void VideoGen::random_Bg_Sprites_init(int nrOfSprites)
     {
         for (int j = 0; j < MAPHEIGTH; j++)
         {
+            backgroundSpritesMap[i][j] = &caster_pixel_data;
+            /*
             int random = rand() % (nrOfSprites + 1);
             // cout << random << " ";
             switch (random)
@@ -48,6 +50,7 @@ void VideoGen::random_Bg_Sprites_init(int nrOfSprites)
                 backgroundSpritesMap[i][j] = &medic_pixel_data;
                 break;
             }
+            */
         }
     }
 }
@@ -56,13 +59,14 @@ void VideoGen::fill_Bg_Sprites(){
     int offset;
     unsigned char(*selected_array)[32];
     
-    for (int i = 0; i < NUM_LINE_SCREEN; i++)
+    for (int i = 0; i < 32; i++)
     {
         while(VGA::doneLine == bg_generated_line);//wait to not overtake the display
+        
         for (int j = 0; j < MAPLENGHT; j++)
         {
-            selected_array = *backgroundSpritesMap[i / 32][j];
-            memcpy(VGA::genBuffer[bg_generated_line] + j * 32, selected_array[i % 32], 32);
+            selected_array = *backgroundSpritesMap[0][j];
+            memcpy(VGA::genBuffer[bg_generated_line] + j * 32, selected_array[0], 32);
         }
         bg_generated_line = (bg_generated_line+1)%BUFFER_LINE_SIZE;
     }

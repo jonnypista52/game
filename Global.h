@@ -17,6 +17,8 @@
 #include "hardware/watchdog.h"
 #include "hardware/clocks.h"
 
+#include "./debug/printer.h"
+
 //* power level
 #define HIGH 1
 #define LOW 0
@@ -37,8 +39,8 @@
 #define BUFFER_LINE_SIZE 96
 #define NROFBGSPRITES 8
 #define BGSPRITES_SIZE 32
-#define NUM_PIXELS_INLINE 320
-#define NUM_LINE_SCREEN 240
+#define NUM_PIXELS_INLINE 640
+#define NUM_LINE_SCREEN 480
 
 #define MAPHEIGTH NUM_LINE_SCREEN/BGSPRITES_SIZE
 #define MAPLENGHT NUM_PIXELS_INLINE/BGSPRITES_SIZE

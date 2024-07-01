@@ -2,6 +2,6 @@ pio file generate
 
 cd ./build/pioasm
 make
-./pioasm -o c-sdk ../../pio/vga/vga.pio ../../pio/vga/vga.h
+./pioasm -o c-sdk ../../pio/vga/video.pio ../../pio/vga/video.h
 
 
