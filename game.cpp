@@ -14,8 +14,6 @@
 #include "./debug/mix.h"
 #include "./input/include/Stick.h"
 
-
-
 #include "./debug/printer.h"
 #include <stdlib.h>
 #include "hardware/structs/bus_ctrl.h"
@@ -31,8 +29,13 @@ int64_t alarm_callback(alarm_id_t id, void *user_data)
 */
 int counter = 0;
 
-void gpio_callback(uint gpio, uint32_t events)
+void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
+    if (VGA::currentLineSend > 10 && VGA::currentLineSend < 490)
+    {
+        VGA::sendNextLine();
+    }
+    VGA::currentLineSend = (VGA::currentLineSend + 1) % 524;
 }
 
 void core1_entry()
@@ -49,10 +52,8 @@ int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
     stdio_init_all();
-    sleep_ms(1000);
     set_sys_clock_khz(280000, true);
     printf("starting %d\n", clock_get_hz(clk_sys));
-
     //! TEST
     // Sticktest();
     //! END TEST
@@ -64,12 +65,25 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
-    VGA* vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
+    VGA *vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
 
-    VideoGen videogen(vga);
+    // vga->fill();
+    // VideoGen videogen(vga);
+    // videogen.random_Bg_Sprites_init(8);
+    vga->fill();
+
+    while (!gpio_get(VSYNC))
+        ;
+    while (gpio_get(VSYNC))
+        ;
+    while (!gpio_get(VSYNC))
+        ;
+
+    gpio_set_irq_enabled_with_callback(HSYNC, GPIO_IRQ_EDGE_RISE, true, &HsyncInterrupt_handler);
 
     while (true)
     {
+        // videogen.fill_Bg_Sprites();
     }
 
     return 0;

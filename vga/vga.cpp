@@ -32,36 +32,27 @@ VGA::~VGA()
 {
 }
 
-void VGA::startSending()
+void VGA::sendNextLine()
+{
+    dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
+    while (dma_channel_is_busy(dma_chan))
+        ;
+    dma_channel_start(dma_chan);
+    doneLine = (doneLine + 1) % BUFFER_LINE_SIZE;
+}
+
+void VGA::sendBlank()
 {
     dma_channel_set_read_addr(dma_chan, &blankLine, true);
-    while (1)
-    {
-        while (gpio_get(VSYNC))
-            ;
-        dma_channel_start(dma_chan);
-        for (int currentLineSend = 1; currentLineSend < 525; currentLineSend++)
-        {
-            if (currentLineSend > 10 && currentLineSend < 490)
-            {
-                dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
-            }
-            else
-            {
-                dma_channel_set_read_addr(dma_chan, &blankLine, true);
-            }
-            while (dma_channel_is_busy(dma_chan))
-                ;
-            dma_channel_start(dma_chan);
-        }
-    }
+    while (dma_channel_is_busy(dma_chan))
+        ;
+    dma_channel_start(dma_chan);
 }
 
 ///***PRIVATE ****/////
 
 void VGA::DMASetup(PIO pio, uint sm)
 {
-    dma_chan = dma_claim_unused_channel(true);
     dma_chan = dma_claim_unused_channel(true);
     dma_channel_config c = dma_channel_get_default_config(dma_chan);
     channel_config_set_transfer_data_size(&c, DMA_SIZE_32);
@@ -82,11 +73,11 @@ void VGA::DMASetup(PIO pio, uint sm)
 
 void VGA::fill()
 {
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < BUFFER_LINE_SIZE; i++)
     {
         for (int j = 0; j < NUM_PIXELS_INLINE; j++)
         {
-            genBuffer[i][j] = 0xD1;
+            genBuffer[i][j] = 0xD7;
         }
     }
 }

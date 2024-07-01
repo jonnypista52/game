@@ -66,7 +66,9 @@ target_include_directories(game PRIVATE
 #no malloc panic
 target_compile_definitions(game PRIVATE PICO_MALLOC_PANIC=0)
 
-pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/hello.pio)
+pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/vga/hvga.pio)
+pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/vga/video.pio)
+pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/vga/vvga.pio)
 # Add any user requested libraries
 target_link_libraries(game 
         hardware_spi

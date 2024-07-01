@@ -1,6 +1,8 @@
 #ifndef Global_h
 #define Global_h
 
+#include <pico/stdlib.h>
+#include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -32,10 +34,13 @@
 #define VSYNC 7
 #define VIDEOR0 8
 
+#define BUFFER_LINE_SIZE 96
 #define NROFBGSPRITES 8
-#define MAPHEIGTH 15
-#define MAPLENGHT 20
+#define BGSPRITES_SIZE 32
 #define NUM_PIXELS_INLINE 320
 #define NUM_LINE_SCREEN 240
+
+#define MAPHEIGTH NUM_LINE_SCREEN/BGSPRITES_SIZE
+#define MAPLENGHT NUM_PIXELS_INLINE/BGSPRITES_SIZE
 
 #endif

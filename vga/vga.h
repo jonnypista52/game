@@ -8,14 +8,11 @@
 #include "pico/sem.h"
 #include "hardware/irq.h"
 
-
 inline static int bussyWayTooMuch = 0;
 
 class VGA
 {
 private:
-    inline static int dma_chan = 0;
-    inline static int8_t doneLine = 0;
     PIO vSync;
     uint vSyncSM;
     PIO hSync;
@@ -23,23 +20,24 @@ private:
     PIO video;
     uint videoSM;
 
-    inline static bool videoSync = false;
-    //inline static int currentLineSend = 0;
-    size_t capture_buf_size = 32;
-    uint32_t capture_buf[32];
+    inline static int dma_chan = 0;
+
     void DMASetup(PIO pio, uint sm);
 
-    inline static uint32_t genBuffer[3][NUM_PIXELS_INLINE]{0};
-    inline static uint32_t blankLine[NUM_PIXELS_INLINE]{0};
-
 public:
+    inline static int8_t doneLine = 0;     // index of buffer line in sending
+    inline static int currentLineSend = 0; // scancode line
+
+    inline static uint8_t blankLine[NUM_PIXELS_INLINE]{0};
+    inline static uint8_t genBuffer[BUFFER_LINE_SIZE][NUM_PIXELS_INLINE]{0};
+
     VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint videoSM);
     ~VGA();
 
-    //starts sending after it synced with vSync
-    void startSending();
+    // sends the next line
+    static void sendNextLine();
+    static void sendBlank();
 
-    static void dma_handler();
     //! TEST
     void fill();
 };

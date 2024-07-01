@@ -6,7 +6,6 @@
 #include "./controll/spiPorts.h"
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
-#include "./pio/pio.h"
 #include "./pio/config.h"
 #include "./errorCheck/basicError.h"
 #include "./debug/printer.h"
