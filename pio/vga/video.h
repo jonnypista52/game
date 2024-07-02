@@ -53,7 +53,7 @@ static inline void vga_video_program_init(PIO pio, uint stma, uint offset, uint 
     sm_config_set_out_shift(&c, true, true, 8);
     sm_config_set_fifo_join(&c, PIO_FIFO_JOIN_TX);
     // clock
-    sm_config_set_clkdiv_int_frac(&c, 5, 0x77);
+    sm_config_set_clkdiv_int_frac(&c, 5, 144);
     pio_sm_init(pio, stma, offset, &c);
     printf("data print: \n");
 }

@@ -1,6 +1,6 @@
 #include "./videoGen.h"
 
-VideoGen::VideoGen(VGA *vga)
+VideoGen::VideoGen(IVGA *vga)
 {
     this->vga = vga;
 }

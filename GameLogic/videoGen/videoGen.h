@@ -17,9 +17,9 @@ class VideoGen
 private:
     int bg_generated_line = 0;
     unsigned char (*backgroundSpritesMap[MAPLENGHT][MAPHEIGTH])[BGSPRITES_SIZE][BGSPRITES_SIZE];
-    VGA *vga;
+    IVGA *vga;
 public:
-    VideoGen(VGA *vga);
+    VideoGen(IVGA *vga);
     ~VideoGen();
 
     void random_Bg_Sprites_init(int nrOfSprites);

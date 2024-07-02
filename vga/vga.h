@@ -1,6 +1,7 @@
 #ifndef vga_h
 #define vga_h
 
+#include "./Ivga.h"
 #include "../Global.h"
 #include "../pio/vga/hvga.h"
 #include "../pio/vga/vvga.h"
@@ -8,9 +9,7 @@
 #include "pico/sem.h"
 #include "hardware/irq.h"
 
-inline static int bussyWayTooMuch = 0;
-
-class VGA
+class VGA: public IVGA
 {
 private:
     PIO vSync;
@@ -39,8 +38,8 @@ public:
     static void sendBlank();
 
     //! TEST
-    void fill();
-    void fillDifferent();
+    void fill() override;
+    void fillDifferent() override;;
 };
 
 #endif

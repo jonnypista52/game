@@ -19,7 +19,7 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
 
     pio_sm_put_blocking(hSync, hSyncSM, (NUM_PIXELS_INLINE + 48) / 16); // running a 16x extra divider
     pio_sm_put_blocking(vSync, vSyncSM, ((NUM_PIXELS_INLINE + 16 + 48) / 16) * (480 + 10 + 103));
-    pio_sm_put_blocking(video, videoSM, (NUM_PIXELS_INLINE) - 1);
+    pio_sm_put_blocking(video, videoSM, (NUM_PIXELS_INLINE)-1);
 
     DMASetup(video, videoSM);
 
@@ -86,9 +86,10 @@ void VGA::fillDifferent()
 {
     for (int i = 0; i < BUFFER_LINE_SIZE; i++)
     {
-        for (int j = 0; j < NUM_PIXELS_INLINE; j+=8)
+        for (int j = 0; j < NUM_PIXELS_INLINE; j += 8)
         {
-            genBuffer[i][j] = 0x00;
+            /*
+            genBuffer[i][j+0] = 0x00;
             genBuffer[i][j+1] = 0x07;
             genBuffer[i][j+2] = 0x70;
             genBuffer[i][j+3] = 0x77;
@@ -96,6 +97,15 @@ void VGA::fillDifferent()
             genBuffer[i][j+5] = 0xF0;
             genBuffer[i][j+6] = 0xF7;
             genBuffer[i][j+7] = 0xFF;
+            */
+            genBuffer[i][j + 0] = 0x00;
+            genBuffer[i][j + 1] = 0xFF;
+            genBuffer[i][j + 2] = 0x00;
+            genBuffer[i][j + 3] = 0xFF;
+            genBuffer[i][j + 4] = 0x00;
+            genBuffer[i][j + 5] = 0xFF;
+            genBuffer[i][j + 6] = 0x00;
+            genBuffer[i][j + 7] = 0xFF;
         }
     }
 }

@@ -71,9 +71,9 @@ int main()
     */
 
     VGA *vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
-    //VideoGen videogen(vga);
-    //videogen.random_Bg_Sprites_init(0);
-    vga->fillDifferent();
+    VideoGen videogen(vga);
+    videogen.random_Bg_Sprites_init(0);
+    //vga->fillDifferent();
 
     while (!gpio_get(VSYNC))
         ;
@@ -86,7 +86,7 @@ int main()
 
     while (true)
     {
-        //videogen.fill_Bg_Sprites();
+        videogen.fill_Bg_Sprites();
     }
 
     return 0;
