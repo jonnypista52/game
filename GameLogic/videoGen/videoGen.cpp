@@ -7,7 +7,6 @@ VideoGen::VideoGen(IVGA *vga)
 
 VideoGen::~VideoGen()
 {
-    delete vga;
 }
 
 void VideoGen::random_Bg_Sprites_init(int nrOfSprites)

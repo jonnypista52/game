@@ -9,7 +9,7 @@
 #include "pico/sem.h"
 #include "hardware/irq.h"
 
-class VGA: public IVGA
+class VGA : public IVGA
 {
 private:
     PIO vSync;
@@ -24,22 +24,16 @@ private:
     void DMASetup(PIO pio, uint sm);
 
 public:
-    inline static int8_t doneLine = 0;     // index of buffer line in sending
-    inline static int currentLineSend = 0; // scancode line
-
-    inline static uint8_t blankLine[NUM_PIXELS_INLINE]{0};
-    inline static uint8_t genBuffer[BUFFER_LINE_SIZE][NUM_PIXELS_INLINE]{0};
-
-    VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint videoSM);
-    ~VGA();
+    explicit VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint videoSM);
 
     // sends the next line
-    static void sendNextLine();
-    static void sendBlank();
+    void sendNextLine() override;
+    void sendBlank() override;
 
     //! TEST
     void fill() override;
-    void fillDifferent() override;;
+    void fillDifferent() override;
+    ;
 };
 
 #endif

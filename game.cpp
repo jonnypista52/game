@@ -28,17 +28,18 @@ int64_t alarm_callback(alarm_id_t id, void *user_data)
 }
 */
 int counter = 0;
-
+VGA *vga;
 void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
     if (VGA::currentLineSend > 10 && VGA::currentLineSend < 490)
     {
-        VGA::sendNextLine();
+        vga->sendNextLine();
     }
-    else{
-        VGA::sendBlank();
+    else
+    {
+        vga->sendBlank();
     }
-    
+
     VGA::currentLineSend = (VGA::currentLineSend + 1) % 524;
 }
 
@@ -70,10 +71,10 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
-    VGA *vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
+    vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
     VideoGen videogen(vga);
-    videogen.random_Bg_Sprites_init(0);
-    //vga->fillDifferent();
+    //videogen.random_Bg_Sprites_init(0);
+    vga->fillDifferent();
 
     while (!gpio_get(VSYNC))
         ;
@@ -86,7 +87,7 @@ int main()
 
     while (true)
     {
-        videogen.fill_Bg_Sprites();
+        //videogen.fill_Bg_Sprites();
     }
 
     return 0;

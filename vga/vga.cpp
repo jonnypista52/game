@@ -28,10 +28,6 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
     pio_sm_set_enabled(video, videoSM, true);
 }
 
-VGA::~VGA()
-{
-}
-
 void VGA::sendNextLine()
 {
     dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
