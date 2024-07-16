@@ -9,6 +9,7 @@ class IVGA
 {
 private:
 public:
+    virtual ~IVGA(){}
     inline static int8_t doneLine = 0;     // index of buffer line in sending
     inline static int currentLineSend = 0; // scancode line
 

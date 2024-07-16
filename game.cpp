@@ -1,11 +1,11 @@
-#include "Global.h"
+#include "./Global.h"
 #include "pico/multicore.h"
 
 #include "./controll/spiPorts.h"
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 
-#include "./GameLogic/videoGen/videoGen.h"
+#include "./GameLogic/logic/snake/snake.h"
 
 #include "./vga/vga.h"
 
@@ -29,6 +29,8 @@ int64_t alarm_callback(alarm_id_t id, void *user_data)
 */
 int counter = 0;
 IVGA *vga;
+GAMEENGINE *snakeEngine;
+
 void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
     if (IVGA::currentLineSend >= 10 && IVGA::currentLineSend < 490)
@@ -45,10 +47,11 @@ void HsyncInterrupt_handler(uint gpio, uint32_t events)
 
 void core1_entry()
 {
-    puts("core1 started");
+    // puts("core1 started");
     while (1)
     {
-        tight_loop_contents();
+        snakeEngine->GameLoop();
+        snakeEngine->fill_Bg_Sprites();
         /* code */
     }
 }
@@ -66,19 +69,18 @@ int main()
     //! TEST
     // Sticktest();
     //! END TEST
-    /*
+    vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
+    //vga->fillDifferent();
+    snakeEngine = new SNAKE(vga);
+    gpio_put(TESTPIN, 1);
     multicore_launch_core1(core1_entry);
 
+    /*
     SPIPORTS *sd_spi_ports = new SPIPORTS(SD_SPI_CHANNEL, SD_CS, SD_SCK, SD_MOSI, SD_MISO);
     SPI *spisd = new SPI(SD_FREQ, sd_spi_ports);
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
-    vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
-    VideoGen videogen(vga);
-    videogen.random_Bg_Sprites_init(8);
-    vga->fillDifferent();
-    videogen.fill_Bg_Sprites();
     while (!gpio_get(VSYNC))
         ;
     while (gpio_get(VSYNC))
@@ -87,6 +89,8 @@ int main()
         ;
 
     // gpio_put(TESTPIN, 0);
+
+    sleep_ms(1000);
 
     gpio_set_irq_enabled_with_callback(HSYNC, GPIO_IRQ_EDGE_FALL, true, &HsyncInterrupt_handler);
 

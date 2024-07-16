@@ -1,3 +1,4 @@
+/*
 #include "./videoGen.h"
 
 VideoGen::VideoGen(IVGA *vga)
@@ -69,3 +70,5 @@ void VideoGen::fill_Bg_Sprites()
         bg_generated_line = (bg_generated_line + 1) % BUFFER_LINE_SIZE;
     }
 }
+
+*/

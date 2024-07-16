@@ -1,3 +1,4 @@
+/*
 #ifndef videoGen_h
 #define videoGen_h
 
@@ -27,3 +28,5 @@ public:
 };
 
 #endif
+
+*/

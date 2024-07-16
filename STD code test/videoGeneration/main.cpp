@@ -1,7 +1,7 @@
 #include <iostream>
 #include <chrono>
 #include <thread>
-#include "../../GameLogic/videoGen/videoGen.h"
+#include "../../GameLogic/logic/snake/snake.h"
 #include "./mockupVGAout/vgaSaveFirstFrame.h"
 #include <atomic>
 
@@ -30,22 +30,22 @@ void repeatFunction()
         }
         IVGA::currentLineSend = (IVGA::currentLineSend + 1) % 524;
         // Sleep for a set amount of time (e.g., 1 second)
-        //sleep_until(system_clock::now() + milliseconds(10));
+        // sleep_until(system_clock::now() + milliseconds(10));
     }
 }
 
 int main()
 {
     vgamockup = new vgaSaveFirstFrame();
-    VideoGen vGen(vgamockup);
-    vGen.random_Bg_Sprites_init(0);
+    GAMEENGINE *snakeEngine = new SNAKE(vgamockup);
+    snakeEngine->GameLoop();
     cout << "generated background \n";
-
     std::thread repeatingThread(repeatFunction);
     while (true)
     {
-        vGen.fill_Bg_Sprites();
-        sleep_until(system_clock::now() + milliseconds(50));
+        snakeEngine->GameLoop();
+        snakeEngine->fill_Bg_Sprites();
+        //sleep_until(system_clock::now() + milliseconds(50));
     }
 
     sleep_for(nanoseconds(10));

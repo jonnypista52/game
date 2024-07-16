@@ -3,7 +3,7 @@
 void vgaSaveFirstFrame::sendNextLine()
 {
     // std::cout << "line: " << (int)doneLine << std::endl;
-    if (frameCounter == 1)
+    if (frameCounter == 2)
     {
         for (int i = 0; i < NUM_PIXELS_INLINE; i++)
         {
@@ -11,8 +11,9 @@ void vgaSaveFirstFrame::sendNextLine()
         }
         outputFile << std::endl;
     }
-    if (frameCounter > 1)
+    if (frameCounter >= 3)
     {
+        outputFile.close();
         std::cout << "done\n";
     }
     if (IVGA::currentLineSend == 489)
