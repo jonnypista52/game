@@ -6,4 +6,5 @@
 //print anything in binary
 void printBits(size_t const size, void const * const ptr);
 
+void printArray(uint8_t* array, int arraySize);
 #endif

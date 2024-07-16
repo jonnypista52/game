@@ -35,21 +35,21 @@ add_executable(game
               controll/spiPorts.cpp
               controll/SDCard.cpp
 
+              GameLogic/videoGen/videoGen.cpp
+
               input/Stick.cpp
 
               debug/printer.cpp
               debug/mix.cpp
 
               vga/vga.cpp
-
-              video/video.cpp
               )
 
 pico_set_program_name(game "game")
 pico_set_program_version(game "0.1")
 
 pico_enable_stdio_uart(game 0)
-pico_enable_stdio_usb(game 1)
+pico_enable_stdio_usb(game 0)
 
 # Add the standard library to the build
 target_link_libraries(game
@@ -64,7 +64,9 @@ target_include_directories(game PRIVATE
 #no malloc panic
 target_compile_definitions(game PRIVATE PICO_MALLOC_PANIC=0)
 
-pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/hello.pio)
+pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/vga/hvga.pio)
+pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/vga/video.pio)
+pico_generate_pio_header(game ${CMAKE_CURRENT_LIST_DIR}/pio/vga/vvga.pio)
 # Add any user requested libraries
 target_link_libraries(game 
         hardware_spi

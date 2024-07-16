@@ -5,6 +5,8 @@
 #include "./controll/spi.h"
 #include "./controll/SDCard.h"
 
+#include "./GameLogic/videoGen/videoGen.h"
+
 #include "./vga/vga.h"
 
 #include "./errorCheck/basicError.h"
@@ -26,15 +28,24 @@ int64_t alarm_callback(alarm_id_t id, void *user_data)
 }
 */
 int counter = 0;
-
-void gpio_callback(uint gpio, uint32_t events)
+IVGA *vga;
+void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
+    if (IVGA::currentLineSend >= 10 && IVGA::currentLineSend < 490)
+    {
+        vga->sendNextLine();
+    }
+    else
+    {
+        vga->sendBlank();
+    }
+
+    IVGA::currentLineSend = (IVGA::currentLineSend + 1) % 524;
 }
 
 void core1_entry()
 {
     puts("core1 started");
-    // gpio_set_irq_enabled_with_callback(SD_SCK_test, GPIO_IRQ_EDGE_RISE, true, &gpio_callback);
     while (1)
     {
         tight_loop_contents();
@@ -45,11 +56,13 @@ void core1_entry()
 int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
-    stdio_init_all();
-    sleep_ms(1000);
+    // stdio_init_all();
+    // sleep_ms(1000);
     set_sys_clock_khz(280000, true);
-    printf("starting %d\n", clock_get_hz(clk_sys));
-
+    // printf("starting %d\n", clock_get_hz(clk_sys));
+    gpio_init(TESTPIN);
+    gpio_set_dir(TESTPIN, GPIO_OUT);
+    gpio_put(TESTPIN, 0);
     //! TEST
     // Sticktest();
     //! END TEST
@@ -61,10 +74,21 @@ int main()
     SDCARD *sdCard = new SDCARD(spisd);
     */
 
-    VGA vga(pio1, 0, pio1, 1, pio0, 0);
-    vga.fill();
+    vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
+    VideoGen videogen(vga);
+    videogen.random_Bg_Sprites_init(8);
+    vga->fillDifferent();
+    videogen.fill_Bg_Sprites();
+    while (!gpio_get(VSYNC))
+        ;
+    while (gpio_get(VSYNC))
+        ;
+    while (!gpio_get(VSYNC))
+        ;
 
-    vga.startSending();
+    // gpio_put(TESTPIN, 0);
+
+    gpio_set_irq_enabled_with_callback(HSYNC, GPIO_IRQ_EDGE_FALL, true, &HsyncInterrupt_handler);
 
     while (true)
     {

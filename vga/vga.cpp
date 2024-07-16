@@ -17,9 +17,9 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
     vga_vsync_program_init(vSync, vSyncSM, offsetVsync, VSYNC);
     vga_video_program_init(video, videoSM, offsetVideo, VIDEOR0);
 
-    pio_sm_put_blocking(hSync, hSyncSM, (640 + 48) / 16); // running a 16x extra divider
-    pio_sm_put_blocking(vSync, vSyncSM, ((640 + 16 + 48) / 16) * (480 + 10 + 103));
-    pio_sm_put_blocking(video, videoSM, (640 / 2) - 1);
+    pio_sm_put_blocking(hSync, hSyncSM, (NUM_PIXELS_INLINE + 48) / 16); // running a 16x extra divider
+    pio_sm_put_blocking(vSync, vSyncSM, ((NUM_PIXELS_INLINE + 16 + 48) / 16) * (480 + 10 + 103));
+    pio_sm_put_blocking(video, videoSM, (NUM_PIXELS_INLINE)-1);
 
     DMASetup(video, videoSM);
 
@@ -28,33 +28,20 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
     pio_sm_set_enabled(video, videoSM, true);
 }
 
-VGA::~VGA()
+void VGA::sendNextLine()
 {
+    dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
+    //while (dma_channel_is_busy(dma_chan));
+    dma_channel_start(dma_chan);
+    doneLine = (doneLine + 1) % BUFFER_LINE_SIZE;
 }
 
-void VGA::startSending()
+void VGA::sendBlank()
 {
     dma_channel_set_read_addr(dma_chan, &blankLine, true);
-    while (1)
-    {
-        while (gpio_get(VSYNC))
-            ;
-        dma_channel_start(dma_chan);
-        for (int currentLineSend = 1; currentLineSend < 525; currentLineSend++)
-        {
-            if (currentLineSend > 10 && currentLineSend < 490)
-            {
-                dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
-            }
-            else
-            {
-                dma_channel_set_read_addr(dma_chan, &blankLine, true);
-            }
-            while (dma_channel_is_busy(dma_chan))
-                ;
-            dma_channel_start(dma_chan);
-        }
-    }
+    while (dma_channel_is_busy(dma_chan))
+        ;
+    dma_channel_start(dma_chan);
 }
 
 ///***PRIVATE ****/////
@@ -62,10 +49,9 @@ void VGA::startSending()
 void VGA::DMASetup(PIO pio, uint sm)
 {
     dma_chan = dma_claim_unused_channel(true);
-    dma_chan = dma_claim_unused_channel(true);
     dma_channel_config c = dma_channel_get_default_config(dma_chan);
-    channel_config_set_transfer_data_size(&c, DMA_SIZE_32);
-    channel_config_set_read_increment(&c, false);
+    channel_config_set_transfer_data_size(&c, DMA_SIZE_8);
+    channel_config_set_read_increment(&c, true);
     channel_config_set_dreq(&c, DREQ_PIO0_TX0);
 
     dma_channel_configure(
@@ -82,11 +68,39 @@ void VGA::DMASetup(PIO pio, uint sm)
 
 void VGA::fill()
 {
-    for (int i = 0; i < 3; i++)
+    for (int i = 0; i < BUFFER_LINE_SIZE; i++)
     {
         for (int j = 0; j < NUM_PIXELS_INLINE; j++)
         {
-            genBuffer[i][j] = 0xD1;
+            genBuffer[i][j] = 0xD7;
+        }
+    }
+}
+
+void VGA::fillDifferent()
+{
+    for (int i = 0; i < BUFFER_LINE_SIZE; i++)
+    {
+        for (int j = 0; j < NUM_PIXELS_INLINE; j += 8)
+        {
+            /*
+            genBuffer[i][j+0] = 0x00;
+            genBuffer[i][j+1] = 0x07;
+            genBuffer[i][j+2] = 0x70;
+            genBuffer[i][j+3] = 0x77;
+            genBuffer[i][j+4] = 0x00;
+            genBuffer[i][j+5] = 0xF0;
+            genBuffer[i][j+6] = 0xF7;
+            genBuffer[i][j+7] = 0xFF;
+            */
+            genBuffer[i][j + 0] = 0x00;
+            genBuffer[i][j + 1] = 0xFF;
+            genBuffer[i][j + 2] = 0x00;
+            genBuffer[i][j + 3] = 0xFF;
+            genBuffer[i][j + 4] = 0x00;
+            genBuffer[i][j + 5] = 0xFF;
+            genBuffer[i][j + 6] = 0x00;
+            genBuffer[i][j + 7] = 0xFF;
         }
     }
 }

@@ -34,8 +34,9 @@ def png_to_c_array(filename, output_file):
     # Generate C-style array string
     array_string = "{\n"
     for i in range(height):
+        array_string += "{"
         for j in range(width):
-            coordinate = [i,j]
+            coordinate = [j,i]
             
             
             pixel = np.array(img.getpixel(coordinate))
@@ -44,14 +45,50 @@ def png_to_c_array(filename, output_file):
             compr = compress_pixel(ret[0],ret[1],ret[2])
             array_string += str(compr)
             array_string += ","
-        array_string += "\n"
+        array_string = array_string[:-1]
+        array_string += "},\n"
     array_string += "};\n"
 
     # Write the generated array string to the output file
     with open(output_file, "w") as f:
-        f.write("unsigned char pixel_data[] = " + array_string)
+        f.write("#ifndef " + filename[:-4] + "sprite_h \n#define " + filename[:-4] + "sprite_h\nstatic unsigned char " + filename[:-4] + "_pixel_data[32][32] = " + array_string + "\n #endif")
 
 # Usage example
+input_filename = "caster.png"
+output_filename = "caster.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
+input_filename = "defender.png"
+output_filename = "defender.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
+input_filename = "guard.png"
+output_filename = "guard.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
+input_filename = "medic.png"
+output_filename = "medic.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
+input_filename = "sniper.png"
+output_filename = "sniper.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
+input_filename = "specialist.png"
+output_filename = "specialist.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
+input_filename = "supporter.png"
+output_filename = "supporter.h"
+png_to_c_array(input_filename, output_filename)
+print(f"Pixel data written to {output_filename}")
+
 input_filename = "vanguard.png"
 output_filename = "vanguard.h"
 png_to_c_array(input_filename, output_filename)
