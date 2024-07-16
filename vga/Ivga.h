@@ -1,11 +1,10 @@
 #ifndef ivga_h
 #define ivga_h
 
+#include "../Global.h"
 #include <stdlib.h>
 #include <stdio.h>
 
-#define BUFFER_LINE_SIZE 96
-#define NUM_PIXELS_INLINE 640
 class IVGA
 {
 private:

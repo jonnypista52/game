@@ -36,7 +36,7 @@ def png_to_c_array(filename, output_file):
     for i in range(height):
         array_string += "{"
         for j in range(width):
-            coordinate = [i,j]
+            coordinate = [j,i]
             
             
             pixel = np.array(img.getpixel(coordinate))

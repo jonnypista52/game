@@ -28,10 +28,10 @@ int64_t alarm_callback(alarm_id_t id, void *user_data)
 }
 */
 int counter = 0;
-VGA *vga;
+IVGA *vga;
 void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
-    if (VGA::currentLineSend > 10 && VGA::currentLineSend < 490)
+    if (IVGA::currentLineSend >= 10 && IVGA::currentLineSend < 490)
     {
         vga->sendNextLine();
     }
@@ -40,7 +40,7 @@ void HsyncInterrupt_handler(uint gpio, uint32_t events)
         vga->sendBlank();
     }
 
-    VGA::currentLineSend = (VGA::currentLineSend + 1) % 524;
+    IVGA::currentLineSend = (IVGA::currentLineSend + 1) % 524;
 }
 
 void core1_entry()
@@ -56,10 +56,13 @@ void core1_entry()
 int main()
 {
     uint CAPTURE_N_SAMPLES = 96;
-    stdio_init_all();
-    sleep_ms(1000);
+    // stdio_init_all();
+    // sleep_ms(1000);
     set_sys_clock_khz(280000, true);
-    printf("starting %d\n", clock_get_hz(clk_sys));
+    // printf("starting %d\n", clock_get_hz(clk_sys));
+    gpio_init(TESTPIN);
+    gpio_set_dir(TESTPIN, GPIO_OUT);
+    gpio_put(TESTPIN, 0);
     //! TEST
     // Sticktest();
     //! END TEST
@@ -73,9 +76,9 @@ int main()
 
     vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
     VideoGen videogen(vga);
-    //videogen.random_Bg_Sprites_init(0);
+    videogen.random_Bg_Sprites_init(8);
     vga->fillDifferent();
-
+    videogen.fill_Bg_Sprites();
     while (!gpio_get(VSYNC))
         ;
     while (gpio_get(VSYNC))
@@ -83,11 +86,12 @@ int main()
     while (!gpio_get(VSYNC))
         ;
 
-    gpio_set_irq_enabled_with_callback(HSYNC, GPIO_IRQ_EDGE_RISE, true, &HsyncInterrupt_handler);
+    // gpio_put(TESTPIN, 0);
+
+    gpio_set_irq_enabled_with_callback(HSYNC, GPIO_IRQ_EDGE_FALL, true, &HsyncInterrupt_handler);
 
     while (true)
     {
-        //videogen.fill_Bg_Sprites();
     }
 
     return 0;

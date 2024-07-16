@@ -2,7 +2,7 @@
 #define videoGen_h
 
 #include "../../Global.h"
-#include "../../vga/vga.h"
+#include "../../vga/Ivga.h"
 #include "../../sprites/caster.h"
 #include "../../sprites/defender.h"
 #include "../../sprites/guard.h"
@@ -16,7 +16,7 @@ class VideoGen
 {
 private:
     int bg_generated_line = 0;
-    unsigned char (*backgroundSpritesMap[MAPLENGHT][MAPHEIGTH])[BGSPRITES_SIZE][BGSPRITES_SIZE];
+    unsigned char (*backgroundSpritesMap[(MAPHEIGTH)][(MAPLENGHT)])[BGSPRITES_SIZE][BGSPRITES_SIZE];
     IVGA *vga;
 public:
     VideoGen(IVGA *vga);

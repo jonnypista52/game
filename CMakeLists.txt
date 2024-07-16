@@ -43,15 +43,13 @@ add_executable(game
               debug/mix.cpp
 
               vga/vga.cpp
-
-              video/video.cpp
               )
 
 pico_set_program_name(game "game")
 pico_set_program_version(game "0.1")
 
 pico_enable_stdio_uart(game 0)
-pico_enable_stdio_usb(game 1)
+pico_enable_stdio_usb(game 0)
 
 # Add the standard library to the build
 target_link_libraries(game

@@ -1,13 +1,11 @@
 #include "./vgaMockup.h"
 
-//***! TEST
-
 void vgaMockup::sendNextLine()
 {
-    std::cout << "line: " << doneLine << std::endl;
+    std::cout << "line: " << (int)doneLine << std::endl;
     for (int i = 0; i < NUM_PIXELS_INLINE; i++)
     {
-        std::cout << genBuffer[doneLine][i];
+        std::cout << (int)genBuffer[doneLine][i] << " ";
     }
     std::cout << std::endl
               << std::endl;

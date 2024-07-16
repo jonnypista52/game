@@ -1,11 +1,15 @@
 #ifndef Global_h
 #define Global_h
 
-#include <pico/stdlib.h>
+#define PICO_INCLUDE
+
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+
+#ifdef PICO_INCLUDE
+#include <pico/stdlib.h>
 #include "pico/stdlib.h"
 #include "hardware/uart.h"
 #include "hardware/gpio.h"
@@ -16,8 +20,10 @@
 #include "hardware/timer.h"
 #include "hardware/watchdog.h"
 #include "hardware/clocks.h"
-
 #include "./debug/printer.h"
+#endif
+
+
 
 //* power level
 #define HIGH 1
@@ -35,6 +41,7 @@
 #define HSYNC 6
 #define VSYNC 7
 #define VIDEOR0 8
+#define TESTPIN 16
 
 #define BUFFER_LINE_SIZE 96
 #define NROFBGSPRITES 8

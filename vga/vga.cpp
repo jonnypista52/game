@@ -31,8 +31,7 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
 void VGA::sendNextLine()
 {
     dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
-    while (dma_channel_is_busy(dma_chan))
-        ;
+    //while (dma_channel_is_busy(dma_chan));
     dma_channel_start(dma_chan);
     doneLine = (doneLine + 1) % BUFFER_LINE_SIZE;
 }

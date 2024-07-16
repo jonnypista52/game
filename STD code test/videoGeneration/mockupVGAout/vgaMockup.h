@@ -3,7 +3,7 @@
 
 
 #include <iostream>
-#include "../../vga/Ivga.h"
+#include "../../../vga/Ivga.h"
 
 class vgaMockup : public IVGA
 {
@@ -11,15 +11,13 @@ private:
     /* data */
 public:
     vgaMockup(){}
-    // sends the next data line
-    static void sendNextLine();
-    // sends an blank black line
-    static void sendBlank();
+    
+    // sends the next line
+    void sendNextLine() override;
+    void sendBlank() override;
 
     //! TEST
-    // implement as you wish
     void fill() override;
-    // implement as you wish
     void fillDifferent() override;
 };
 
