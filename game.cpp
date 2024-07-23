@@ -33,7 +33,7 @@ GAMEENGINE *snakeEngine;
 
 void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
-    if (IVGA::currentLineSend >= 10 && IVGA::currentLineSend < 490)
+    if (IVGA::currentLineSend >= 30 && IVGA::currentLineSend < 510)
     {
         vga->sendNextLine();
     }
@@ -41,15 +41,20 @@ void HsyncInterrupt_handler(uint gpio, uint32_t events)
     {
         vga->sendBlank();
     }
-
+    if (IVGA::currentLineSend == 0)
+    {
+        vga->framecounter++;
+    }
     IVGA::currentLineSend = (IVGA::currentLineSend + 1) % 524;
 }
 
 void core1_entry()
 {
     // puts("core1 started");
+    snakeEngine->Initialise_Buffer_BG();
     while (1)
     {
+        gpio_put(TESTPIN, 1);
         snakeEngine->GameLoop();
         snakeEngine->fill_Bg_Sprites();
         /* code */
@@ -70,9 +75,8 @@ int main()
     // Sticktest();
     //! END TEST
     vga = new VGA(pio1, 0, pio1, 1, pio0, 0);
-    //vga->fillDifferent();
     snakeEngine = new SNAKE(vga);
-    gpio_put(TESTPIN, 1);
+    // gpio_put(TESTPIN, 1);
     multicore_launch_core1(core1_entry);
 
     /*
@@ -90,9 +94,10 @@ int main()
 
     // gpio_put(TESTPIN, 0);
 
-    sleep_ms(1000);
-
+    // vga->sendBlank();
+    vga->enablePIO();
     gpio_set_irq_enabled_with_callback(HSYNC, GPIO_IRQ_EDGE_FALL, true, &HsyncInterrupt_handler);
+    
 
     while (true)
     {

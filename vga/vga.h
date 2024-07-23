@@ -29,6 +29,7 @@ public:
     // sends the next line
     void sendNextLine() override;
     void sendBlank() override;
+    void enablePIO() override;
 
     //! TEST
     void fill() override;

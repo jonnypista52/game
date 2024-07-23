@@ -2,54 +2,71 @@
 
 SNAKE::SNAKE(IVGA *vga)
 {
-    this->Coordinatestmp.x = 4;
-    this->Coordinatestmp.y = 4;
+    this->Coordinatestmp.x = 0;
+    this->Coordinatestmp.y = 0;
     this->vga = vga;
 
     for (int i = 0; i < MAPHEIGTH; i++)
     {
         for (int j = 0; j < MAPLENGHT; j++)
         {
-            this->backgroundSpritesMap[i][j] = &specialist_pixel_data;
+            this->backgroundSpritesMap[i][j] = &blank_pixel_data;
         }
     }
 
     snakePositions.push_front(this->Coordinatestmp);
-    this->backgroundSpritesMap[4][4] = &supporter_pixel_data;
+    this->backgroundSpritesMap[0][0] = &solid_pixel_data;
+    this->backgroundSpritesMap[0][1] = &solid_pixel_data;
+    this->backgroundSpritesMap[0][2] = &solid_pixel_data;
+    this->backgroundSpritesMap[0][19] = &solid_pixel_data;
+    
+    this->backgroundSpritesMap[1][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[2][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[3][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[4][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[5][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[6][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[7][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[8][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[9][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[10][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[11][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[12][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[13][19] = &solid_pixel_data;
+    this->backgroundSpritesMap[14][19] = &solid_pixel_data;
+    
 }
 
 SNAKE::~SNAKE()
 {
 }
+
+bool SNAKE::updateAllowed()
+{
+    if (vga->framecounter > (uint)(this->updateStartFrame + this->updateFrameDelay))
+    {
+        this->updateStartFrame = vga->framecounter;
+        return true;
+    }
+    return false;
+}
+
 // TODO just make the game
 void SNAKE::GameLoop()
 {
-    //gpio_put(TESTPIN, 0);
-    this->backgroundSpritesMap[this->Coordinatestmp.x][this->Coordinatestmp.y] = &blank_pixel_data;
-    this->Coordinatestmp.y = (this->Coordinatestmp.y + 1) % (MAPLENGHT);
-    this->backgroundSpritesMap[this->Coordinatestmp.x][this->Coordinatestmp.y] = &supporter_pixel_data;
-    //gpio_put(TESTPIN, 1);
-}
-
-void SNAKE::fill_Bg_Sprites()
-{
-    unsigned char(*selected_array)[32];
-    int arrayLine = 0;
-    for (; bg_generated_line < NUM_LINE_SCREEN; bg_generated_line++)
+    /*
+    if (updateAllowed())
     {
-        arrayLine = bg_generated_line / 32;
-        // printf("vga done line: %d, bg_gen_line: %d\n", IVGA::doneLine, bg_generated_line_buffer);
-        if (IVGA::doneLine == bg_generated_line_buffer)
-        {
-            return;
-        } // return to not overtake the display
-        for (int j = 0; j < MAPLENGHT; j++)
-        {
-            selected_array = *backgroundSpritesMap[arrayLine][j];
 
-            memcpy(IVGA::genBuffer[bg_generated_line_buffer] + j * 32, selected_array[bg_generated_line % 32], 32);
+        // gpio_put(TESTPIN, 0);
+        this->backgroundSpritesMap[this->Coordinatestmp.x][this->Coordinatestmp.y] = &blank_pixel_data;
+        this->Coordinatestmp.y = (this->Coordinatestmp.y + 1) % (MAPLENGHT);
+        if (this->Coordinatestmp.y == 0)
+        {
+            this->Coordinatestmp.x = (this->Coordinatestmp.x + 1) % (MAPHEIGTH);
         }
-        bg_generated_line_buffer = (bg_generated_line_buffer + 1) % BUFFER_LINE_SIZE;
+        this->backgroundSpritesMap[this->Coordinatestmp.x][this->Coordinatestmp.y] = &defender_pixel_data;
+        // gpio_put(TESTPIN, 1);
     }
-    bg_generated_line = 0;
+    */
 }

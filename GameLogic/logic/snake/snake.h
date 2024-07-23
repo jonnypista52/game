@@ -4,8 +4,9 @@
 #include "../gameEngine.h"
 #include <list>
 #include "../../../sprites/blank.h"
-#include "../../../sprites/supporter.h"
+#include "../../../sprites/defender.h"
 #include "../../../sprites/specialist.h"
+#include "../../../sprites/solid.h"
 
 class SNAKE : public GAMEENGINE
 {
@@ -16,8 +17,8 @@ private:
 public:
     explicit SNAKE(IVGA *vga);
     ~SNAKE();
+    bool updateAllowed();
     void GameLoop() override;
-    void fill_Bg_Sprites() override;
 };
 
 #endif

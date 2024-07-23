@@ -1,9 +1,9 @@
-#include "./vgaSaveFirstFrame.h"
+#include "./vgaSaveNthFrame.h"
 
-void vgaSaveFirstFrame::sendNextLine()
+void vgaSaveNthFrame::sendNextLine()
 {
     // std::cout << "line: " << (int)doneLine << std::endl;
-    if (frameCounter == 2)
+    if (this->framecounter == this->frameToSave)
     {
         for (int i = 0; i < NUM_PIXELS_INLINE; i++)
         {
@@ -11,14 +11,15 @@ void vgaSaveFirstFrame::sendNextLine()
         }
         outputFile << std::endl;
     }
-    if (frameCounter >= 3)
+    if (this->framecounter == (this->frameToSave + 1))
     {
         outputFile.close();
         std::cout << "done\n";
+        exit(0);
     }
     if (IVGA::currentLineSend == 489)
     {
-        frameCounter++;
+        this->framecounter++;
     }
 
     doneLine = (doneLine + 1) % BUFFER_LINE_SIZE;

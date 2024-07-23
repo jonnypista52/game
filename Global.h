@@ -1,7 +1,8 @@
 #ifndef Global_h
 #define Global_h
 
-#define PICO_INCLUDE
+//! comment this to somewhat run on PC instead the pico, as long no pico hardware required
+#define PICO_INCLUDE 
 
 #include <string.h>
 #include <stdlib.h>

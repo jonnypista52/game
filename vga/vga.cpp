@@ -2,6 +2,7 @@
 
 VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint videoSM)
 {
+    printf("vga constructor\n");
     this->vSync = vSync;
     this->vSyncSM = vSyncSM;
     this->hSync = hSync;
@@ -25,14 +26,25 @@ VGA::VGA(PIO vSync, uint vSyncSM, PIO hSync, uint hSyncSM, PIO video, uint video
 
     pio_sm_set_enabled(hSync, hSyncSM, true);
     pio_sm_set_enabled(vSync, vSyncSM, true);
-    pio_sm_set_enabled(video, videoSM, true);
+    pio_sm_set_enabled(video, videoSM, false);
+
+    for (int i = 0; i < BUFFER_LINE_SIZE; i++)
+    {
+        for (int j = 0; j < NUM_PIXELS_INLINE; j++)
+        {
+            genBuffer[i][j] = 0;
+        }
+    }
 }
 
 void VGA::sendNextLine()
 {
     dma_channel_set_read_addr(dma_chan, &genBuffer[doneLine], true);
-    //while (dma_channel_is_busy(dma_chan));
+    while (dma_channel_is_busy(dma_chan))
+        ;
+    //pio_sm_clear_fifos(video, videoSM);
     dma_channel_start(dma_chan);
+
     doneLine = (doneLine + 1) % BUFFER_LINE_SIZE;
 }
 
@@ -41,7 +53,14 @@ void VGA::sendBlank()
     dma_channel_set_read_addr(dma_chan, &blankLine, true);
     while (dma_channel_is_busy(dma_chan))
         ;
+    //pio_sm_clear_fifos(video, videoSM);
     dma_channel_start(dma_chan);
+}
+
+void VGA::enablePIO()
+{
+    pio_sm_set_enabled(video, videoSM, true);
+    pio_sm_clear_fifos(video, videoSM);
 }
 
 ///***PRIVATE ****/////
