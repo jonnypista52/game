@@ -2,8 +2,7 @@
 
 SNAKE::SNAKE(IVGA *vga)
 {
-    this->Coordinatestmp.x = 0;
-    this->Coordinatestmp.y = 0;
+    this->stick = STICK();
     this->vga = vga;
 
     for (int i = 0; i < MAPHEIGTH; i++)
@@ -13,32 +12,42 @@ SNAKE::SNAKE(IVGA *vga)
             this->backgroundSpritesMap[i][j] = &blank_pixel_data;
         }
     }
-
+    this->direction = 1;
+    this->Coordinatestmp.x = 4;
+    this->Coordinatestmp.y = 3;
     snakePositions.push_front(this->Coordinatestmp);
-    this->backgroundSpritesMap[0][0] = &solid_pixel_data;
-    this->backgroundSpritesMap[0][1] = &solid_pixel_data;
-    this->backgroundSpritesMap[0][2] = &solid_pixel_data;
-    this->backgroundSpritesMap[0][19] = &solid_pixel_data;
-    
-    this->backgroundSpritesMap[1][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[2][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[3][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[4][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[5][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[6][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[7][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[8][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[9][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[10][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[11][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[12][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[13][19] = &solid_pixel_data;
-    this->backgroundSpritesMap[14][19] = &solid_pixel_data;
-    
+    this->Coordinatestmp.x = 4;
+    this->Coordinatestmp.y = 4;
+    snakePositions.push_front(this->Coordinatestmp);
+    this->Coordinatestmp.x = 4;
+    this->Coordinatestmp.y = 5;
+    snakePositions.push_front(this->Coordinatestmp);
+
+    this->backgroundSpritesMap[4][3] = &solid_pixel_data;
+    this->backgroundSpritesMap[4][4] = &solid_pixel_data;
+    this->backgroundSpritesMap[4][5] = &solid_pixel_data;
 }
 
 SNAKE::~SNAKE()
 {
+}
+
+uint8_t SNAKE::getDirectionFromStick()
+{
+
+    STICK_POSITION tmp;
+    tmp = this->stick.getStickPosition();
+
+    if (tmp.x > STICK_binary_treshold)
+        return 0;
+    if (tmp.y > STICK_binary_treshold)
+        return 1;
+    //convert negative to positive, if it would been a big pistivite value then it
+    //would have already exited
+    if ((tmp.x * -1) > STICK_binary_treshold) 
+        return 2;
+    if ((tmp.x * -1) > STICK_binary_treshold)
+        return 3;
 }
 
 bool SNAKE::updateAllowed()

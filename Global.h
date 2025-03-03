@@ -2,7 +2,7 @@
 #define Global_h
 
 //! comment this to somewhat run on PC instead the pico, as long no pico hardware required
-#define PICO_INCLUDE 
+//#define PICO_INCLUDE 
 
 #include <string.h>
 #include <stdlib.h>
@@ -16,6 +16,7 @@
 #include "hardware/gpio.h"
 #include "hardware/divider.h"
 #include "hardware/spi.h"
+#include "hardware/adc.h"
 #include "hardware/dma.h"
 #include "hardware/pio.h"
 #include "hardware/timer.h"
@@ -30,7 +31,7 @@
 #define HIGH 1
 #define LOW 0
 
-//* DAC pins
+//* SD pins
 #define SD_SPI_CHANNEL 0
 #define SD_FREQ 400000
 #define SD_SCK 2
@@ -42,7 +43,21 @@
 #define HSYNC 6
 #define VSYNC 7
 #define VIDEOR0 8
+
+//*Stick signals
+// which ADC will read it, set it to 0-2, must be unique
+#define THROTLE_ADC 0
+#define X_axis_ADC 1
+#define Y_axis_ADC 2
+
+#define STICK_binary_treshold 50 //at what precentage it registers as an input
+
+#define STICK_NEUTRAL 1489
+#define STICK_RANGE 100
+
+
 #define TESTPIN 16
+
 
 #define BUFFER_LINE_SIZE 96
 #define NROFBGSPRITES 8

@@ -2,7 +2,7 @@
 #include <chrono>
 #include <thread>
 #include "../../GameLogic/logic/snake/snake.h"
-#include "./mockupVGAout/vgaSaveNthFrame.h"
+#include "../mockups/mockupVGAout/vgaSaveNthFrame.h"
 #include <atomic>
 
 using namespace std;

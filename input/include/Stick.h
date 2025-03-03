@@ -1,14 +1,6 @@
 #pragma once
 #include "../../Global.h"
-#include "hardware/adc.h"
 
-// which ADC will read it, set it to 0-2, must be unique
-#define X_axis_ADC 0
-#define Y_axis_ADC 1
-#define THROTLE_ADC 2
-
-#define STICK_NEUTRAL 2048
-#define STICK_RANGE 100
 
 struct STICK_POSITION
 {
@@ -19,6 +11,8 @@ struct STICK_POSITION
 class STICK
 {
 private:
+    //convert the raw value to a value between -100 and 100 depending on how far the stick is being pushed
+    //100-100 might not be achiveable, because the circular design.
     int8_t convertToRange(int16_t adc_raw_value);
 
 public:
