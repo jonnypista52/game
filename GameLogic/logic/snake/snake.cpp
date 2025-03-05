@@ -6,8 +6,6 @@ SNAKE::SNAKE(IVGA *vga)
     this->vga = vga;
     currentDir = right;
     previousDir = right;
-    NextHead.x = 5;
-    NextHead.y = 4;
     ate = false;
     for (int i = 0; i < MAPHEIGTH; i++)
     {
@@ -19,16 +17,18 @@ SNAKE::SNAKE(IVGA *vga)
     // put food down
     this->FoodCoordinates.x = 1;
     this->FoodCoordinates.y = 1;
-    this->backgroundSpritesMap[1][1] = &solid_red_pixel_data;
+    this->backgroundSpritesMap[7][7] = &solid_red_pixel_data;
 
     this->Coordinatestmp.x = 2;
     this->Coordinatestmp.y = 4;
     snakePositions.push_front(this->Coordinatestmp);
-    this->Coordinatestmp.x = 2;
+    this->Coordinatestmp.x = 3;
     this->Coordinatestmp.y = 4;
     snakePositions.push_front(this->Coordinatestmp);
     this->Coordinatestmp.x = 4;
     this->Coordinatestmp.y = 4;
+    this->NextHead.x = 4;
+    this->NextHead.y = 4;
     snakePositions.push_front(this->Coordinatestmp);
 
     this->backgroundSpritesMap[2][4] = &solid_pixel_data;
@@ -148,7 +148,7 @@ bool SNAKE::SNAKE_gameOver()
 {
 
     // boundy
-    if (NextHead.x < 0 || NextHead.y < 0 || NextHead.x >= MAPLENGHT || NextHead.y >= MAPHEIGTH)
+    if (NextHead.x < 0 || NextHead.y < 0 || NextHead.x >= MAPHEIGTH || NextHead.y >= MAPLENGHT)
         return true;
 
     // yooo, that's not possible
@@ -180,12 +180,13 @@ void SNAKE::GameLoop()
         currentDir = getDirectionFromStick();
         if (currentDir == none)
             currentDir = previousDir;
-        // printf("dir: %i\n", currDir);
         currentDir = dirCheck();
         updateHead();
+        std::cout << "Head Position: " << NextHead.x << " " << NextHead.y << std::endl;
+        std::cout << "dir: " << currentDir << std::endl;
         IsFood();
         move(); // it will just auto freeze when the game ends
-
+        previousDir = currentDir;
         // gpio_put(TESTPIN, 1);
     }
 }

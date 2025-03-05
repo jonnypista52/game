@@ -38,16 +38,16 @@ int main()
 {
     vgamockup = new vgaSaveNthFrame(400);
     GAMEENGINE *snakeEngine = new SNAKE(vgamockup);
-    snakeEngine->GameLoop();
+    //snakeEngine->GameLoop();
     cout << "generated background \n";
     snakeEngine->Initialise_Buffer_BG();
     std::thread repeatingThread(repeatFunction);
     
     while (true)
     {
-        //snakeEngine->GameLoop();
-        //snakeEngine->fill_Bg_Sprites();
-        //sleep_until(system_clock::now() + milliseconds(1));
+        snakeEngine->GameLoop();
+        snakeEngine->fill_Bg_Sprites();
+        sleep_until(system_clock::now() + milliseconds(100));
     }
 
     sleep_for(nanoseconds(10));

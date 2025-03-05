@@ -1,3 +1,8 @@
 build/
 .vscode/
 STD code test/test
+STD_code_test/ADCtest/adcTest
+STD_code_test/videoGeneration/main
+input/Stick
+GameLogic/logic/snake/snake
+*.out

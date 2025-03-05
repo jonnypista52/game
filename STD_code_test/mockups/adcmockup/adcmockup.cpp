@@ -9,5 +9,7 @@ void adc_fifo_drain() {}
 
 int adc_read()
 {
-    return adcValuesArray[last_Adc_read_index];
+    last_Adc_read_index++;
+    printf("adc val: %d \n", adcValuesArray[last_Adc_read_index - 1]);
+    return adcValuesArray[last_Adc_read_index - 1];
 }

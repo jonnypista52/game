@@ -18,7 +18,7 @@ protected:
     unsigned char (*backgroundSpritesMap[(MAPHEIGTH)][(MAPLENGHT)])[BGSPRITES_SIZE][BGSPRITES_SIZE];
     IVGA *vga;
     uint updateStartFrame = 0;     // on which frame the update started
-    uint updateFrameDelay = 20; // how many frames has to pass for the next game update
+    uint updateFrameDelay = 60; // how many frames has to pass for the next game update
 public:
     virtual ~GAMEENGINE()
     {

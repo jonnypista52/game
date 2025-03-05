@@ -2,7 +2,7 @@
 #define Global_h
 
 //! comment this to somewhat run on PC instead the pico, as long no pico hardware required
-//#define PICO_INCLUDE 
+#define PICO_INCLUDE
 
 #include <string.h>
 #include <stdlib.h>
@@ -54,13 +54,11 @@
 #define X_axis_ADC 1
 #define Y_axis_ADC 2
 
-#define STICK_binary_treshold 50 //at what precentage it registers as an input
+#define STICK_binary_treshold 30 // at what precentage it registers as an input
 
 #define STICK_RANGE 100
 
-
 #define TESTPIN 16
-
 
 #define BUFFER_LINE_SIZE 96
 #define NROFBGSPRITES 8
@@ -68,9 +66,7 @@
 #define NUM_PIXELS_INLINE 640
 #define NUM_LINE_SCREEN 480
 
-#define MAPHEIGTH NUM_LINE_SCREEN/BGSPRITES_SIZE
-#define MAPLENGHT NUM_PIXELS_INLINE/BGSPRITES_SIZE
-
-
+#define MAPHEIGTH NUM_LINE_SCREEN / BGSPRITES_SIZE
+#define MAPLENGHT NUM_PIXELS_INLINE / BGSPRITES_SIZE
 
 #endif

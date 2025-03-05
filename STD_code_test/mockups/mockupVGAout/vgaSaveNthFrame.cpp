@@ -14,8 +14,8 @@ void vgaSaveNthFrame::sendNextLine()
     if (this->framecounter == (this->frameToSave + 1))
     {
         outputFile.close();
-        std::cout << "done\n";
-        exit(0);
+        //std::cout << "done\n";
+        //exit(0);
     }
     if (IVGA::currentLineSend == 489)
     {
