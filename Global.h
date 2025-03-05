@@ -25,7 +25,11 @@
 #include "./debug/printer.h"
 #endif
 
+#ifndef PICO_INCLUDE
 
+#include "./STD_code_test/mockups/adcmockup/adcmockup.h"
+
+#endif
 
 //* power level
 #define HIGH 1
@@ -52,7 +56,6 @@
 
 #define STICK_binary_treshold 50 //at what precentage it registers as an input
 
-#define STICK_NEUTRAL 1489
 #define STICK_RANGE 100
 
 

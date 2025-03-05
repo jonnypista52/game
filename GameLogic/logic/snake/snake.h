@@ -4,9 +4,8 @@
 #include "../gameEngine.h"
 #include <list>
 #include "../../../sprites/blank.h"
-#include "../../../sprites/defender.h"
-#include "../../../sprites/specialist.h"
 #include "../../../sprites/solid.h"
+#include "../../../sprites/solidRed.h"
 
 #include "../../../input/include/Stick.h"
 
@@ -14,15 +13,26 @@ class SNAKE : public GAMEENGINE
 {
 private:
     COORDINATES Coordinatestmp;
+    COORDINATES NextHead;
+    COORDINATES FoodCoordinates;
     std::list<COORDINATES> snakePositions;
-    uint8_t direction; //0 up, 1 right, 2 down, 3 left
     STICK stick;
+    bool ate;
+    enum dir currentDir;
+    enum dir previousDir;
+
+    void updateHead();
+    enum dir getDirectionFromStick();
+    enum dir dirCheck();
+    bool updateAllowed();
+    bool move();
+    bool IsFood();
+    bool SNAKE_gameOver();
 
 public:
     explicit SNAKE(IVGA *vga);
     ~SNAKE();
-    uint8_t getDirectionFromStick();
-    bool updateAllowed();
+
     void GameLoop() override;
 };
 

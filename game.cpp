@@ -29,7 +29,7 @@ int64_t alarm_callback(alarm_id_t id, void *user_data)
 */
 int counter = 0;
 IVGA *vga;
-GAMEENGINE *snakeEngine;
+SNAKE *snakeEngine;
 
 void HsyncInterrupt_handler(uint gpio, uint32_t events)
 {
@@ -57,6 +57,7 @@ void core1_entry()
         gpio_put(TESTPIN, 1);
         snakeEngine->GameLoop();
         snakeEngine->fill_Bg_Sprites();
+        gpio_put(TESTPIN, 0);
         /* code */
     }
 }
